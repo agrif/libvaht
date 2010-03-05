@@ -1,0 +1,15 @@
+AUTHORS of libVaht:
+
+Aaron Griffith <aargri@gmail.com>
+
+Special Thanks:
+
+Ron Hayter <mystriveal@mac.com> - Provided priceless assistance with figuring
+out what actually went on with the .mov files in Mohawk archives, and is
+author of Riveal, a program for extracting movies/sounds/etc from Riven.
+
+Tito Dal Canton <tito@indivia.net> - Runs "A Look Inside the Link", and, along
+with others, is responsible for reverse engineering the Mohawk archive format
+and the resource formats. This is basically ALITL in library form.
+   -- http://insidethelink.ortiche.net/
+

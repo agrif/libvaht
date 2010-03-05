@@ -1,0 +1,13 @@
+2009-02-23 Aaron Griffith <aargri@gmail.com>
+
+	* vaht_bmp.c: removed useless, confusing LOOKBACKP wrap
+	* vaht_bmp.c: fixed uncompressed, indexed decompression
+
+2009-02-21 Aaron Griffith <aargri@gmail.com>
+	
+	* changed to autotools build system
+	
+	* vaht_bmp.c: added format introspection
+	* vaht_bmp.c: added truecolor support
+	
+	* vaht_resource.c: can now read into NULL pointer, acts as seek.

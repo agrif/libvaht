@@ -1,0 +1,5 @@
+#!/bin/sh
+
+make maintainer-clean
+rm -rf aclocal.m4 config.guess config.sub configure depcomp install-sh ltmain.sh m4 Makefile.in missing include/Makefile.in src/Makefile.in autom4te.cache Makefile include/Makefile src/Makefile config.log config.status
+

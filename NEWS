@@ -1,0 +1,13 @@
+--- February 23, 2009
+
+tBMP support should now be complete, further changes should be just
+optimization. Yay!
+
+--- February 21, 2009
+
+I changed the build system to GNU autotools, just to get out of the dark ages
+and into the new century.
+
+Oh, and also tBMP format introspection and truecolor support for that one
+guy's picture. I hope he's proud of all the work he forced me through.
+

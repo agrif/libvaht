@@ -1,0 +1,3 @@
+AUTOMAKE_OPTIONS = gnu
+SUBDIRS = include src
+ACLOCAL_AMFLAGS = -I m4
