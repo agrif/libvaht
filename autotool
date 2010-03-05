@@ -4,6 +4,6 @@ mkdir m4
 
 aclocal
 autoconf
-libtoolize
+libtoolize | glibtoolize
 automake --add-missing
 
