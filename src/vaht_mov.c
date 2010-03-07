@@ -139,7 +139,7 @@ uint32_t vaht_mov_read(vaht_mov* mov, uint32_t size, void* buffer)
 	
 	uint32_t read = vaht_resource_read(mov->res, size, buffer);
 	
-	if (mov->stco_start < mov->seek + read || mov->seek < mov->stco_start + mov->stco_length)
+	if (mov->stco_start < mov->seek + read && mov->seek < mov->stco_start + mov->stco_length)
 	{
 		// we have overlap! no to find out how...
 		// src is mov->stco_data, dest is buffer
@@ -162,7 +162,10 @@ uint32_t vaht_mov_read(vaht_mov* mov, uint32_t size, void* buffer)
 		
 		uint32_t length = MIN(mov->stco_length - src_start, read - dest_start);
 		
-		memcpy(&(buffer[dest_start]), &(mov->stco_data[src_start]), length);
+		//printf("src: %i dest: %i length: %i\n", src_start, dest_start, length);
+		
+		if (mov->stco_data)
+			memcpy(&(buffer[dest_start]), &(mov->stco_data[src_start]), length);
 	}
 	
 	mov->seek += read;
