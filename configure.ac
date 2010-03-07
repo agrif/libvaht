@@ -1,4 +1,4 @@
-AC_INIT(libvaht, 0.1, aargri@gmail.com)
+AC_INIT(libvaht, 0.2, aargri@gmail.com)
 AM_INIT_AUTOMAKE($PACKAGE_NAME, $PACKAGE_VERSION)
 
 AC_CONFIG_MACRO_DIR([m4])

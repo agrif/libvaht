@@ -1,3 +1,7 @@
+2010-03-07 Aaron Griffith <aargri@gmail.com>
+
+	* vaht_mov.c: added tMOV translator
+
 2009-02-23 Aaron Griffith <aargri@gmail.com>
 
 	* vaht_bmp.c: removed useless, confusing LOOKBACKP wrap
