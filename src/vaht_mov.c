@@ -71,9 +71,10 @@ static uint32_t read_atom(vaht_mov* mov, uint32_t start)
 		//printf("stco chunk: %i entries\n", entries);
 		
 		// size:4 type:4 version:1 flags:3 #entries:4;
-		mov->stco_start = start + 16;
-		mov->stco_length = entries * 4;
-		mov->stco_data = malloc(mov->stco_length);
+		mov->stco_start[mov->stco_count] = start + 16;
+		mov->stco_length[mov->stco_count] = entries * 4;
+		mov->stco_data[mov->stco_count] = malloc(mov->stco_length);
+		mov->stco_count += 1;
 		
 		uint32_t file_offset = mov->res->file_table_entry.data_offset;
 		//printf("file offset: %i\n", file_offset);
@@ -91,7 +92,7 @@ static uint32_t read_atom(vaht_mov* mov, uint32_t start)
 			//printf(" - new: %i\n", entry);
 			VAHT_SWAP_U32(entry);
 			
-			memcpy(&(mov->stco_data[4 * i]), &entry, 4);
+			memcpy(&(mov->stco_data[mov->stco_count - 1][4 * i]), &entry, 4);
 		}
 	}
 	
@@ -106,9 +107,7 @@ vaht_mov* vaht_mov_open(vaht_resource* resource)
 	vaht_mov* ret = malloc(sizeof(vaht_mov));
 	
 	ret->res = resource;
-	ret->stco_start = 0;
-	ret->stco_length = 0;
-	ret->stco_data = NULL;
+	ret->stco_count = 0;
 	ret->seek = 0;
 	
 	uint32_t position = 0;
@@ -128,8 +127,12 @@ vaht_mov* vaht_mov_open(vaht_resource* resource)
 
 void vaht_mov_close(vaht_mov* mov)
 {
-	if (mov->stco_data)
-		free(mov->stco_data);
+	unsigned int i;
+	for (i = 0; i < mov->stco_count; i++)
+	{
+		free(mov->stco_data[i]);
+	}
+
 	free(mov);
 }
 
@@ -139,33 +142,37 @@ uint32_t vaht_mov_read(vaht_mov* mov, uint32_t size, void* buffer)
 	
 	uint32_t read = vaht_resource_read(mov->res, size, buffer);
 	
-	if (mov->stco_start < mov->seek + read && mov->seek < mov->stco_start + mov->stco_length)
+	unsigned int i;
+	for (i = 0; i < mov->stco_count; i++)
 	{
-		// we have overlap! no to find out how...
-		// src is mov->stco_data, dest is buffer
-		uint32_t src_start;
-		uint32_t dest_start;
-		
-		if (mov->stco_start >= mov->seek)
+		if (mov->stco_start[i] < mov->seek + read && mov->seek < mov->stco_start[i] + mov->stco_length[i])
 		{
-			// stco begins within buffer
-			src_start = 0;
-			dest_start = mov->stco_start - mov->seek;
-		} else {
-			// stco begins before buffer
-			src_start = mov->seek - mov->stco_start;
-			dest_start = 0;
+			// we have overlap! no to find out how...
+			// src is mov->stco_data, dest is buffer
+			uint32_t src_start;
+			uint32_t dest_start;
+			
+			if (mov->stco_start[i] >= mov->seek)
+			{
+				// stco begins within buffer
+				src_start = 0;
+				dest_start = mov->stco_start[i] - mov->seek;
+			} else {
+				// stco begins before buffer
+				src_start = mov->seek - mov->stco_start[i];
+				dest_start = 0;
+			}
+			
+			// most bytes to read from (mov->stco_length - src_start)
+			// most bytes to write to (read - dest_start)
+			
+			uint32_t length = MIN(mov->stco_length[i] - src_start, read - dest_start);
+			
+			//printf("src: %i dest: %i length: %i\n", src_start, dest_start, length);
+			
+			if (mov->stco_data)
+				memcpy(&(buffer[dest_start]), &(mov->stco_data[i][src_start]), length);
 		}
-		
-		// most bytes to read from (mov->stco_length - src_start)
-		// most bytes to write to (read - dest_start)
-		
-		uint32_t length = MIN(mov->stco_length - src_start, read - dest_start);
-		
-		//printf("src: %i dest: %i length: %i\n", src_start, dest_start, length);
-		
-		if (mov->stco_data)
-			memcpy(&(buffer[dest_start]), &(mov->stco_data[src_start]), length);
 	}
 	
 	mov->seek += read;
