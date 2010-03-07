@@ -65,7 +65,7 @@ static uint32_t read_atom(vaht_mov* mov, uint32_t start)
 		
 		VAHT_SWAP_U32(entries);
 		
-		printf("stco chunk: %i entries\n", entries);
+		//printf("stco chunk: %i entries\n", entries);
 		
 		// size:4 type:4 version:1 flags:3 #entries:4;
 		mov->stco_start = start + 16;
@@ -73,7 +73,7 @@ static uint32_t read_atom(vaht_mov* mov, uint32_t start)
 		mov->stco_data = malloc(mov->stco_length);
 		
 		uint32_t file_offset = mov->res->file_table_entry.data_offset;
-		printf("file offset: %i\n", file_offset);
+		//printf("file offset: %i\n", file_offset);
 		
 		unsigned int i;
 		for (i = 0; i < entries; i++)
@@ -83,9 +83,9 @@ static uint32_t read_atom(vaht_mov* mov, uint32_t start)
 				return 0;
 			
 			VAHT_SWAP_U32(entry);
-			printf(" - old: %i\n", entry);
+			//printf(" - old: %i\n", entry);
 			entry -= file_offset;
-			printf(" - new: %i\n", entry);
+			//printf(" - new: %i\n", entry);
 			VAHT_SWAP_U32(entry);
 			
 			memcpy(&(mov->stco_data[4 * i]), &entry, 4);
@@ -106,6 +106,7 @@ vaht_mov* vaht_mov_open(vaht_resource* resource)
 	ret->stco_start = 0;
 	ret->stco_length = 0;
 	ret->stco_data = NULL;
+	ret->seek = 0;
 	
 	uint32_t position = 0;
 	while (position < vaht_resource_size(resource))
@@ -127,4 +128,17 @@ void vaht_mov_close(vaht_mov* mov)
 	if (mov->stco_data)
 		free(mov->stco_data);
 	free(mov);
+}
+
+uint32_t vaht_mov_read(vaht_mov* mov, uint32_t size, void* buffer)
+{
+	vaht_resource_seek(mov->res, mov->seek);
+	uint32_t read = vaht_resource_read(mov->res, size, buffer);
+	mov->seek += read;
+	return read;
+}
+
+void vaht_mov_seek(vaht_mov* mov, uint32_t seek)
+{
+	mov->seek = seek;
 }

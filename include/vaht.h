@@ -41,6 +41,8 @@ typedef struct vaht_mov_s vaht_mov;
 
 vaht_mov* vaht_mov_open(vaht_resource* resource);
 void vaht_mov_close(vaht_mov* mov);
+uint32_t vaht_mov_read(vaht_mov* mov, uint32_t size, void* buffer);
+void vaht_mov_seek(vaht_mov* mov, uint32_t seek);
 
 #endif // __INCLUDE_VAHT_H__
 
