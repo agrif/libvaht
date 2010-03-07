@@ -1,6 +1,9 @@
 #include "vaht_intern.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+
+#define MIN(_a, _b) ((_a) > (_b) ? (_b) : (_a))
 
 // returns how many bytes it read...
 static uint32_t read_atom(vaht_mov* mov, uint32_t start)
@@ -133,8 +136,37 @@ void vaht_mov_close(vaht_mov* mov)
 uint32_t vaht_mov_read(vaht_mov* mov, uint32_t size, void* buffer)
 {
 	vaht_resource_seek(mov->res, mov->seek);
+	
 	uint32_t read = vaht_resource_read(mov->res, size, buffer);
+	
+	if (mov->stco_start < mov->seek + read || mov->seek < mov->stco_start + mov->stco_length)
+	{
+		// we have overlap! no to find out how...
+		// src is mov->stco_data, dest is buffer
+		uint32_t src_start;
+		uint32_t dest_start;
+		
+		if (mov->stco_start >= mov->seek)
+		{
+			// stco begins within buffer
+			src_start = 0;
+			dest_start = mov->stco_start - mov->seek;
+		} else {
+			// stco begins before buffer
+			src_start = mov->seek - mov->stco_start;
+			dest_start = 0;
+		}
+		
+		// most bytes to read from (mov->stco_length - src_start)
+		// most bytes to write to (read - dest_start)
+		
+		uint32_t length = MIN(mov->stco_length - src_start, read - dest_start);
+		
+		memcpy(&(buffer[dest_start]), &(mov->stco_data[src_start]), length);
+	}
+	
 	mov->seek += read;
+	
 	return read;
 }
 
