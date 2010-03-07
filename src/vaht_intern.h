@@ -102,5 +102,10 @@ struct vaht_bmp_s
 	uint8_t format; // bit 0 - compressed, 1 - truecolor
 };
 
+struct vaht_mov_s
+{
+	//
+};
+
 #endif // __INCLUDE_VAHT_INTERN_H__
 

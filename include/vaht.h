@@ -36,5 +36,11 @@ uint8_t* vaht_bmp_data(vaht_bmp* bmp);
 uint8_t vaht_bmp_compressed(vaht_bmp* bmp);
 uint8_t vaht_bmp_truecolor(vaht_bmp* bmp);
 
+struct vaht_mov_s;
+typedef struct vaht_mov_s vaht_mov;
+
+vaht_mov* vaht_mov_open(vaht_resource* resource);
+void vaht_mov_close(vaht_mov* mov);
+
 #endif // __INCLUDE_VAHT_H__
 
