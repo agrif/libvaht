@@ -104,7 +104,10 @@ struct vaht_bmp_s
 
 struct vaht_mov_s
 {
-	//
+	vaht_resource* res;
+	uint32_t stco_start;
+	uint32_t stco_length;
+	uint8_t* stco_data;
 };
 
 #endif // __INCLUDE_VAHT_INTERN_H__
