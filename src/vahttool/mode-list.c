@@ -6,7 +6,8 @@ static void list_files(struct vt_options* opt, vaht_archive* archive)
 {
 	uint16_t resource_types_count = vaht_archive_get_resource_types(archive);
 	
-	for (unsigned int t = 0; t < resource_types_count; t++)
+	unsigned int t;
+	for (t = 0; t < resource_types_count; t++)
 	{
 		char* type = vaht_archive_get_resource_type(archive, t);
 		
@@ -19,7 +20,8 @@ static void list_files(struct vt_options* opt, vaht_archive* archive)
 		
 		vaht_resource** resources = vaht_resources_open(archive, type);
 		
-		for (unsigned int r = 0; resources[r] != NULL; r++)
+		unsigned int r;
+		for (r = 0; resources[r] != NULL; r++)
 		{
 			// check if we pass the id filter
 			if (opt->filter_id != -1 && opt->filter_id != vaht_resource_id(resources[r]))
@@ -42,7 +44,8 @@ static void list_files(struct vt_options* opt, vaht_archive* archive)
 
 int vt_mode_list(struct vt_options* opt)
 {
-	for (unsigned int i = 0; i < opt->input_files_count; i++)
+	unsigned int i;
+	for (i = 0; i < opt->input_files_count; i++)
 	{
 		vaht_archive* archive = vaht_archive_open(opt->input_files[i]);
 		
