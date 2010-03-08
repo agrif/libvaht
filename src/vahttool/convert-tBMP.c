@@ -39,7 +39,8 @@ int vt_convert_tBMP_write(struct vt_options* opt, vaht_resource* res, char* path
 	png_write_info(png_ptr, info_ptr);
 	
 	uint8_t* data = vaht_bmp_data(bmp);
-	for (unsigned int i = 0; i < vaht_bmp_width(bmp) * vaht_bmp_height(bmp) * 3;
+	unsigned int i;
+	for (i = 0; i < vaht_bmp_width(bmp) * vaht_bmp_height(bmp) * 3;
 		 i += vaht_bmp_width(bmp) * 3)
 	{
 		png_write_row(png_ptr, &(data[i]));
