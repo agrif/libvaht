@@ -1,3 +1,9 @@
+--- March 8, 2010
+
+after a long time, I've got back to work. tMOV files now have an
+interface that changes stco atoms in-stream so that they will
+play correctly as standalone files.
+
 --- February 23, 2009
 
 tBMP support should now be complete, further changes should be just
