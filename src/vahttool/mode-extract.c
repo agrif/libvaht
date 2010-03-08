@@ -21,7 +21,8 @@ static char* make_path_safe(char* name)
 {
 	char* ret = malloc(sizeof(char) * (strlen(name) + 1));
 	strcpy(ret, name);
-	for (unsigned int i = 0; i < strlen(ret); i++)
+	unsigned int i;
+	for (i = 0; i < strlen(ret); i++)
 	{
 		// we should add more checks
 		if (ret[i] == '/')
@@ -82,7 +83,8 @@ static char* construct_output_path(struct vt_options* opt, char* out, char* arch
 	unsigned int startchar = 0;
 	unsigned int endchar = strlen(archivename);
 	
-	for (unsigned int i = 0; i < strlen(archivename); i++)
+	unsigned int i;
+	for (i = 0; i < strlen(archivename); i++)
 	{
 		if (archivename[i] == '/')
 		{
@@ -104,7 +106,7 @@ static char* construct_output_path(struct vt_options* opt, char* out, char* arch
 	// endchar is now set to the last '.' (or the end)
 	// AND endchar - startchar > 0
 	
-	for (unsigned int i = startchar; i < endchar; i++)
+	for (i = startchar; i < endchar; i++)
 	{
 		basename[i - startchar] = archivename[i];
 	}
@@ -181,7 +183,8 @@ static int write_resource(struct vt_options* opt, vaht_resource* res, char* path
 static int extract_archive(struct vt_options* opt, vaht_archive* archive, char* out)
 {
 	uint16_t resource_types_count = vaht_archive_get_resource_types(archive);
-	for (unsigned int t = 0; t < resource_types_count; t++)
+	unsigned int t;
+	for (t = 0; t < resource_types_count; t++)
 	{
 		char* type = vaht_archive_get_resource_type(archive, t);
 		
@@ -208,7 +211,8 @@ static int extract_archive(struct vt_options* opt, vaht_archive* archive, char* 
 		
 		vaht_resource** resources = vaht_resources_open(archive, type);
 		
-		for (unsigned int r = 0; resources[r] != NULL; r++)
+		unsigned int r;
+		for (r = 0; resources[r] != NULL; r++)
 		{
 			// check if we pass the id filter
 			if (opt->filter_id != -1 && opt->filter_id != vaht_resource_id(resources[r]))
@@ -240,7 +244,8 @@ int vt_mode_extract(struct vt_options* opt)
 {
 	int error = 0;
 	
-	for (unsigned int input_file = 0; input_file < opt->input_files_count; input_file++)
+	unsigned int input_file;
+	for (input_file = 0; input_file < opt->input_files_count; input_file++)
 	{
 		vaht_archive* archive = vaht_archive_open(opt->input_files[input_file]);
 		
