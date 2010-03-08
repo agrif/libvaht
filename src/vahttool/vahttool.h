@@ -4,9 +4,9 @@
 #include <vaht.h>
 #include <stdio.h>
 
-#define VAHTTOOL_VERSION "0.2"
+#define VAHTTOOL_VERSION PACKAGE_VERSION
 #define VAHTTOOL_AUTHOR "Aaron Griffith"
-#define VAHTTOOL_EMAIL "aargri@gmail.com"
+#define VAHTTOOL_EMAIL PACKAGE_BUGREPORT
 
 // always print!
 #define vt_error(_opt, ...) fprintf(stderr, "vahttool: " __VA_ARGS__); fprintf(stderr, "\n");
