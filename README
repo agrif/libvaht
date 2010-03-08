@@ -1,3 +1,7 @@
 This is an early version of libvaht, a Mohawk archive and resource reader.
 Mohawk is used as the engine of Riven, versions of Myst, and some other
 games. Vaht is d'ni for five, as Riven is Gehn's fifth age.
+
+Included, and more useful to most, is vahttool, a command-line Mohawk archive
+reader. It reads raw data from all versions of the archive, and will convert
+Riven resources to more readable types.

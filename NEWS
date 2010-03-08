@@ -1,5 +1,10 @@
 --- March 8, 2010
 
+I've merged in the (updated!) vahttool sources. It just seemed
+like a natural place for them to be.
+
+--- March 7, 2010
+
 after a long time, I've got back to work. tMOV files now have an
 interface that changes stco atoms in-stream so that they will
 play correctly as standalone files.

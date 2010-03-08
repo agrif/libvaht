@@ -1,3 +1,7 @@
+2010-03-08 Aaron Griffith <aargri@gmail.com>
+
+	* vahttool: merged in vahttool sources
+
 2010-03-07 Aaron Griffith <aargri@gmail.com>
 
 	* vaht_mov.c: added tMOV translator
