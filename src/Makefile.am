@@ -1,4 +1,6 @@
 AUTOMAKE_OPTIONS = gnu
+SUBDIRS = . vahttool
+
 lib_LTLIBRARIES = libvaht.la
 
 libvaht_la_SOURCES = vaht_swap.c vaht_archive.c vaht_resource.c vaht_bmp.c vaht_mov.c
