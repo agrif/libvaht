@@ -1,3 +1,6 @@
+# built files
+src/vahttool/vahttool
+
 # autotools noise
 m4/
 Makefile

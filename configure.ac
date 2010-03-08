@@ -13,4 +13,7 @@ AC_LANG_C
 AC_HEADER_STDC
 AC_CHECK_HEADERS(stdint.h,,AC_MSG_ERROR(libvaht needs fixed-width integer types from stdint.h))
 
+AC_CHECK_HEADERS(png.h,,AC_MSG_ERROR(vahttool needs libpng to output images in a sane format))
+AC_CHECK_LIB(png, png_create_write_struct,,AC_MSG_ERROR(vahttool needs libpng to output images in a sane format))
+
 AC_OUTPUT(Makefile src/Makefile include/Makefile src/vahttool/Makefile)
