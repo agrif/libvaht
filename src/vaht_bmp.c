@@ -30,10 +30,26 @@ vaht_bmp* vaht_bmp_open(vaht_resource* resource)
 	
 	ret->width = header.width;
 	ret->height = header.height;
+	ret->data = NULL;
+	ret->datastart = vaht_resource_tell(resource);
+	ret->res = resource;
+	
+	if (header.truecolor == 4)
+	{
+		ret->format |= 0x2;
+	}
+	if (header.compression == 4)
+	{
+		ret->format |= 0x1;
+	}
+	
+	// rest of this (+ editing) should go to getdata
+	
 	ret->data = malloc(sizeof(uint8_t) * ret->width * ret->height * 3);
 	
 	uint8_t t1, t2, t3;
 	unsigned int si, ut1, ut2;
+
 	
 	if (header.truecolor == 4)
 	{
@@ -353,7 +369,8 @@ vaht_bmp* vaht_bmp_open(vaht_resource* resource)
 
 void vaht_bmp_close(vaht_bmp* bmp)
 {
-	free(bmp->data);
+	if (bmp->data)
+		free(bmp->data);
 	free(bmp);
 }
 

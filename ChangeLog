@@ -1,5 +1,8 @@
 2010-03-09  Aaron Griffith  <aargri@gmail.com>
 
+	* src/vaht_bmp.c (vaht_bmp_open): preparing for lazy image reading
+	(vaht_bmp_close): added check to see if data is NULL
+
 	* src/vaht_mov.c (vaht_mov_tell): added tell function
 	(vaht_mov_read): removed need for internal seek position
 
