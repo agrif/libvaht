@@ -83,6 +83,7 @@ struct vaht_resource_s
 	uint32_t size;
 	uint32_t seek;
 	char* name;
+	uint16_t refcount;
 };
 
 struct vaht_bmp_header

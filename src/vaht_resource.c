@@ -110,13 +110,25 @@ vaht_resource* vaht_resource_open(vaht_archive* archive, const char* type, uint1
 		fread(ret->name, 1, len, archive->fd);
 	}
 	
+	ret->refcount = 1;
+	
 	return ret;
 }
 
-void vaht_resource_close(vaht_resource* resource)
+uint16_t vaht_resource_close(vaht_resource* resource)
 {
+	resource->refcount--;
+	if (resource->refcount > 0)
+		return resource->refcount;
+
 	free(resource->name);
 	free(resource);
+	return 0;
+}
+
+uint16_t vaht_resource_grab(vaht_resource* resource)
+{
+	resource->refcount++;
 }
 
 vaht_resource** vaht_resources_open(vaht_archive* archive, const char* type)

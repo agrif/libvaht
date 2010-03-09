@@ -109,6 +109,8 @@ vaht_mov* vaht_mov_open(vaht_resource* resource)
 	ret->res = resource;
 	ret->stco_count = 0;
 	
+	vaht_resource_grab(ret->res);
+	
 	uint32_t position = 0;
 	while (position < vaht_resource_size(resource))
 	{
@@ -129,6 +131,8 @@ vaht_mov* vaht_mov_open(vaht_resource* resource)
 
 void vaht_mov_close(vaht_mov* mov)
 {
+	vaht_resource_close(mov->res);
+	
 	unsigned int i;
 	for (i = 0; i < mov->stco_count; i++)
 	{

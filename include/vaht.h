@@ -15,7 +15,8 @@ struct vaht_resource_s;
 typedef struct vaht_resource_s vaht_resource;
 
 vaht_resource* vaht_resource_open(vaht_archive* archive, const char* type, uint16_t id);
-void vaht_resource_close(vaht_resource* resource);
+uint16_t vaht_resource_close(vaht_resource* resource);
+uint16_t vaht_resource_grab(vaht_resource* resource);
 vaht_resource** vaht_resources_open(vaht_archive* archive, const char* type);
 void vaht_resources_close(vaht_resource** resources);
 uint32_t vaht_resource_size(vaht_resource* resource);

@@ -1,5 +1,12 @@
 2010-03-09  Aaron Griffith  <aargri@gmail.com>
 
+	* src/vaht_mov.c: implemented resource memmanagement
+
+	* src/vaht_bmp.c: implemented resource memmanagement
+
+	* src/vaht_resource.c (vaht_resource_grab): added some simple memory
+	management.
+
 	* src/vaht_mov.c (vaht_mov_open): fixed a bug that started reading
 	from the end.
 

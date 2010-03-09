@@ -34,6 +34,8 @@ vaht_bmp* vaht_bmp_open(vaht_resource* resource)
 	ret->datastart = vaht_resource_tell(resource);
 	ret->res = resource;
 	
+	vaht_resource_grab(ret->res);
+	
 	if (header.truecolor == 4)
 	{
 		ret->format |= 0x2;
@@ -369,6 +371,7 @@ vaht_bmp* vaht_bmp_open(vaht_resource* resource)
 
 void vaht_bmp_close(vaht_bmp* bmp)
 {
+	vaht_resource_close(bmp->res);
 	if (bmp->data)
 		free(bmp->data);
 	free(bmp);
