@@ -50,6 +50,7 @@ struct vaht_archive_s
 	struct vaht_mohawk_header_type_table type_table_header;
 	struct vaht_mohawk_type_table* type_table;
 	char** resource_types;
+	uint16_t refcount;
 };
 
 struct vaht_mohawk_resource_table

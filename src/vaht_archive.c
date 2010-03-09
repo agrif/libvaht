@@ -1,4 +1,5 @@
 #include "vaht_intern.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -79,12 +80,19 @@ vaht_archive* vaht_archive_open(const char* filename)
 			ret->resource_types[i][j] = ret->type_table[i].resource_type[j];
 		ret->resource_types[i][4] = 0;
 	}
+
+	ret->refcount = 1;
 		
 	return ret;
 }
 
-void vaht_archive_close(vaht_archive* archive)
+uint16_t vaht_archive_close(vaht_archive* archive)
 {
+	archive->refcount--;
+	printf("archive: %i\n", archive->refcount);
+	if (archive->refcount > 0)
+		return archive->refcount;
+	
 	unsigned int i;
 	if (archive->resource_types)
 	{
@@ -99,6 +107,15 @@ void vaht_archive_close(vaht_archive* archive)
 	free(archive->filename);
 	fclose(archive->fd);
 	free(archive);
+
+	return 0;
+}
+
+uint16_t vaht_archive_grab(vaht_archive* archive)
+{
+	archive->refcount++;
+	printf("archive: %i\n", archive->refcount);
+	return archive->refcount;
 }
 
 uint16_t vaht_archive_get_resource_types(vaht_archive* archive)
