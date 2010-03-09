@@ -207,3 +207,9 @@ void vaht_resource_seek(vaht_resource* resource, uint32_t seek)
 	resource->seek = seek;
 }
 
+uint32_t vaht_resource_tell(vaht_resource* resource)
+{
+	return resource->seek;
+}
+
+

@@ -108,7 +108,6 @@ vaht_mov* vaht_mov_open(vaht_resource* resource)
 	
 	ret->res = resource;
 	ret->stco_count = 0;
-	ret->seek = 0;
 	
 	uint32_t position = 0;
 	while (position < vaht_resource_size(resource))
@@ -138,28 +137,28 @@ void vaht_mov_close(vaht_mov* mov)
 
 uint32_t vaht_mov_read(vaht_mov* mov, uint32_t size, void* buffer)
 {
-	vaht_resource_seek(mov->res, mov->seek);
+	uint32_t seek = vaht_resource_tell(mov->res);
 	
 	uint32_t read = vaht_resource_read(mov->res, size, buffer);
 	
 	unsigned int i;
 	for (i = 0; i < mov->stco_count; i++)
 	{
-		if (mov->stco_start[i] < mov->seek + read && mov->seek < mov->stco_start[i] + mov->stco_length[i])
+		if (mov->stco_start[i] < seek + read && seek < mov->stco_start[i] + mov->stco_length[i])
 		{
 			// we have overlap! no to find out how...
 			// src is mov->stco_data, dest is buffer
 			uint32_t src_start;
 			uint32_t dest_start;
 			
-			if (mov->stco_start[i] >= mov->seek)
+			if (mov->stco_start[i] >= seek)
 			{
 				// stco begins within buffer
 				src_start = 0;
-				dest_start = mov->stco_start[i] - mov->seek;
+				dest_start = mov->stco_start[i] - seek;
 			} else {
 				// stco begins before buffer
-				src_start = mov->seek - mov->stco_start[i];
+				src_start = seek - mov->stco_start[i];
 				dest_start = 0;
 			}
 			
@@ -175,12 +174,15 @@ uint32_t vaht_mov_read(vaht_mov* mov, uint32_t size, void* buffer)
 		}
 	}
 	
-	mov->seek += read;
-	
 	return read;
 }
 
 void vaht_mov_seek(vaht_mov* mov, uint32_t seek)
 {
-	mov->seek = seek;
+	vaht_resource_seek(mov->res, seek);
+}
+
+uint32_t vaht_mov_tell(vaht_mov* mov)
+{
+	return vaht_resource_tell(mov->res);
 }

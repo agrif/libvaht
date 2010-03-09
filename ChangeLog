@@ -1,3 +1,10 @@
+2010-03-09  Aaron Griffith  <aargri@gmail.com>
+
+	* src/vaht_mov.c (vaht_mov_tell): added tell function
+	(vaht_mov_read): removed need for internal seek position
+
+	* src/vaht_resource.c: added a tell function
+
 2010-03-08 Aaron Griffith <aargri@gmail.com>
 
 	* vahttool: merged in vahttool sources

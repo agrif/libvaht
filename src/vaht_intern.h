@@ -109,7 +109,6 @@ struct vaht_mov_s
 	uint32_t stco_length[5];
 	uint8_t* stco_data[5];
 	uint8_t stco_count;
-	uint32_t seek;
 };
 
 #endif // __INCLUDE_VAHT_INTERN_H__
