@@ -1,5 +1,4 @@
 #include "vaht_intern.h"
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -89,7 +88,6 @@ vaht_archive* vaht_archive_open(const char* filename)
 uint16_t vaht_archive_close(vaht_archive* archive)
 {
 	archive->refcount--;
-	printf("archive: %i\n", archive->refcount);
 	if (archive->refcount > 0)
 		return archive->refcount;
 	
@@ -114,7 +112,6 @@ uint16_t vaht_archive_close(vaht_archive* archive)
 uint16_t vaht_archive_grab(vaht_archive* archive)
 {
 	archive->refcount++;
-	printf("archive: %i\n", archive->refcount);
 	return archive->refcount;
 }
 

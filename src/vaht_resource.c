@@ -177,7 +177,7 @@ void vaht_resources_close(vaht_resource** resources)
 	{
 		if (resources[i] == NULL)
 			break;
-		free(resources[i]);
+		vaht_resource_close(resources[i]);
 		++i;
 	}
 	free(resources);

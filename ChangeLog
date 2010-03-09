@@ -1,5 +1,7 @@
 2010-03-09  Aaron Griffith  <aargri@gmail.com>
 
+	* src/vaht_resource.c (vaht_resources_close): fixed memfree bug
+
 	* src/vaht_archive.c (vaht_archive_grab): added similar grab to archive
 
 	* src/vaht_mov.c: implemented resource memmanagement
