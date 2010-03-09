@@ -121,6 +121,9 @@ vaht_mov* vaht_mov_open(vaht_resource* resource)
 		position += add_pos;
 	}
 	
+	// return to the beginning of the tMOV
+	vaht_resource_seek(ret->res, 0);
+	
 	return ret;
 }
 

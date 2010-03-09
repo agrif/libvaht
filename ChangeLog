@@ -1,5 +1,8 @@
 2010-03-09  Aaron Griffith  <aargri@gmail.com>
 
+	* src/vaht_mov.c (vaht_mov_open): fixed a bug that started reading
+	from the end.
+
 	* src/vaht_bmp.c (vaht_bmp_open): preparing for lazy image reading
 	(vaht_bmp_close): added check to see if data is NULL
 
