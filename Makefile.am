@@ -4,3 +4,6 @@ ACLOCAL_AMFLAGS = -I m4
 
 # Doxygen Support
 include $(top_srcdir)/am/doxygen.am
+
+MOSTLYCLEANFILES = -r $(DX_DOCDIR)
+
