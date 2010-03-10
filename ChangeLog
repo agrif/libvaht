@@ -1,3 +1,7 @@
+2010-03-10  Aaron Griffith  <aargri@gmail.com>
+
+	* include/doxygen.cfg: added doxygen to build system
+
 2010-03-09  Aaron Griffith  <aargri@gmail.com>
 
 	* src/vaht_resource.c (vaht_resources_close): fixed memfree bug
