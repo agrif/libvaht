@@ -2,7 +2,9 @@
 src/vahttool/vahttool
 
 # autotools noise
-m4/
+m4/libtool.m4
+m4/lt*.m4
+doxygen-doc
 Makefile
 Makefile.in
 .deps/
