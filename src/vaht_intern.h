@@ -1,4 +1,4 @@
-#include "vaht.h"
+#include "vaht/vaht.h"
 #include <stdio.h>
 
 #ifndef __INCLUDE_VAHT_INTERN_H__
