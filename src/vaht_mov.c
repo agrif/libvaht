@@ -73,7 +73,7 @@ static uint32_t read_atom(vaht_mov* mov, uint32_t start)
 		// size:4 type:4 version:1 flags:3 #entries:4;
 		mov->stco_start[mov->stco_count] = start + 16;
 		mov->stco_length[mov->stco_count] = entries * 4;
-		mov->stco_data[mov->stco_count] = malloc(mov->stco_length);
+		mov->stco_data[mov->stco_count] = malloc(mov->stco_length[mov->stco_count]);
 		mov->stco_count += 1;
 		
 		uint32_t file_offset = mov->res->file_table_entry.data_offset;
@@ -177,7 +177,7 @@ uint32_t vaht_mov_read(vaht_mov* mov, uint32_t size, void* buffer)
 			//printf("src: %i dest: %i length: %i\n", src_start, dest_start, length);
 			
 			if (mov->stco_data)
-				memcpy(&(buffer[dest_start]), &(mov->stco_data[i][src_start]), length);
+				memcpy(&(((uint8_t*)buffer)[dest_start]), &(mov->stco_data[i][src_start]), length);
 		}
 	}
 	

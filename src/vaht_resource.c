@@ -1,4 +1,5 @@
 #include "vaht_intern.h"
+#include <stdlib.h>
 #include <string.h>
 
 vaht_resource* vaht_resource_open(vaht_archive* archive, const char* type, uint16_t id)
@@ -18,15 +19,20 @@ vaht_resource* vaht_resource_open(vaht_archive* archive, const char* type, uint1
 		return NULL;
 	
 	uint16_t res_num = 0;
+	uint32_t read;
 	fseek(archive->fd, archive->rsrc.resource_dir_offset + ro, SEEK_SET);
-	fread(&res_num, 1, sizeof(uint16_t), archive->fd);
+	read = fread(&res_num, 1, sizeof(uint16_t), archive->fd);
+	if (read != sizeof(uint16_t))
+		return NULL;
 	VAHT_SWAP_U16(res_num);
 	
 	struct vaht_mohawk_resource_table rest;
 	int32_t file_table_index = -1;
 	for (i = 0; i < res_num; ++i)
 	{
-		fread(&rest, 1, sizeof(struct vaht_mohawk_resource_table), archive->fd);
+		read = fread(&rest, 1, sizeof(struct vaht_mohawk_resource_table), archive->fd);
+		if (read != sizeof(struct vaht_mohawk_resource_table))
+			return NULL;
 		VAHT_SWAP_U16(rest.resource_id);
 		if (rest.resource_id == id)
 		{
@@ -41,15 +47,23 @@ vaht_resource* vaht_resource_open(vaht_archive* archive, const char* type, uint1
 		return NULL;
 	
 	vaht_resource* ret = malloc(sizeof(vaht_resource));
+	vaht_archive_grab(archive);
+	ret->refcount = 1;
 	ret->id = id;
 	ret->typei = ti;
+	ret->name = NULL;
 	ret->file_table_index = file_table_index;
 	
 	struct vaht_mohawk_file_table file_table_entry;
 	fseek(archive->fd, archive->rsrc.resource_dir_offset + archive->rsrc.file_table_offset + sizeof(uint32_t), SEEK_SET);
 	for (i = 0; i < file_table_index; ++i)
 	{
-		fread(&file_table_entry, 1, sizeof(struct vaht_mohawk_file_table), archive->fd);
+		read = fread(&file_table_entry, 1, sizeof(struct vaht_mohawk_file_table), archive->fd);
+		if (read != sizeof(struct vaht_mohawk_file_table))
+		{
+			vaht_resource_close(ret);
+			return NULL;
+		}
 	}
 	VAHT_SWAP_U32(file_table_entry.data_offset);
 	VAHT_SWAP_U16(file_table_entry.data_size_1);
@@ -60,7 +74,12 @@ vaht_resource* vaht_resource_open(vaht_archive* archive, const char* type, uint1
 	uint32_t next_offset = archive->rsrc.file_size;
 	for (i = 0; i < archive->file_table_entries; ++i)
 	{
-		fread(&file_table_entry, 1, sizeof(struct vaht_mohawk_file_table), archive->fd);
+		read = fread(&file_table_entry, 1, sizeof(struct vaht_mohawk_file_table), archive->fd);
+		if (read != sizeof(struct vaht_mohawk_file_table))
+		{
+			vaht_resource_close(ret);
+			return NULL;
+		}
 		VAHT_SWAP_U32(file_table_entry.data_offset);
 		if (file_table_entry.data_offset > ret->file_table_entry.data_offset && file_table_entry.data_offset < next_offset)
 			next_offset = file_table_entry.data_offset;
@@ -71,14 +90,24 @@ vaht_resource* vaht_resource_open(vaht_archive* archive, const char* type, uint1
 	ret->archive = archive;
 	
 	fseek(archive->fd, archive->rsrc.resource_dir_offset + no, SEEK_SET);
-	fread(&res_num, 1, sizeof(uint16_t), archive->fd);
+	read = fread(&res_num, 1, sizeof(uint16_t), archive->fd);
+	if (read != sizeof(uint16_t))
+	{
+		vaht_resource_close(ret);
+		return NULL;
+	}
 	VAHT_SWAP_U16(res_num);
 	
 	struct vaht_mohawk_name_table name_table_entry;
 	int32_t nlo = -1;
 	for (i = 0; i < res_num; ++i)
 	{
-		fread(&name_table_entry, 1, sizeof(struct vaht_mohawk_name_table), archive->fd);
+		read = fread(&name_table_entry, 1, sizeof(struct vaht_mohawk_name_table), archive->fd);
+		if (read != sizeof(struct vaht_mohawk_name_table))
+		{
+			vaht_resource_close(ret);
+			return NULL;
+		}
 		VAHT_SWAP_U16(name_table_entry.file_table_index);
 		if (ret->file_table_index == name_table_entry.file_table_index)
 		{
@@ -107,11 +136,13 @@ vaht_resource* vaht_resource_open(vaht_archive* archive, const char* type, uint1
 		
 		fseek(archive->fd, archive->rsrc.resource_dir_offset + archive->type_table_header.name_list_offset + nlo, SEEK_SET);
 		ret->name = malloc(len);
-		fread(ret->name, 1, len, archive->fd);
+		read = fread(ret->name, 1, len, archive->fd);
+		if (read != len)
+		{
+			vaht_resource_close(ret);
+			return NULL;
+		}
 	}
-	
-	vaht_archive_grab(archive);
-	ret->refcount = 1;
 	
 	return ret;
 }
@@ -123,7 +154,8 @@ uint16_t vaht_resource_close(vaht_resource* resource)
 		return resource->refcount;
 	
 	vaht_archive_close(resource->archive);
-	free(resource->name);
+	if (resource->name)
+		free(resource->name);
 	free(resource);
 	return 0;
 }
@@ -151,15 +183,24 @@ vaht_resource** vaht_resources_open(vaht_archive* archive, const char* type)
 		return NULL;
 	
 	uint16_t res_num = 0;
+	uint32_t read;
 	fseek(archive->fd, archive->rsrc.resource_dir_offset + ro, SEEK_SET);
-	fread(&res_num, 1, sizeof(uint16_t), archive->fd);
+	read = fread(&res_num, 1, sizeof(uint16_t), archive->fd);
+	if (read != sizeof(uint16_t))
+		return NULL;
 	VAHT_SWAP_U16(res_num);
 	
 	struct vaht_mohawk_resource_table rest;
 	vaht_resource** ret = malloc((sizeof(vaht_resource*) * res_num) + 1);
 	for (i = 0; i < res_num; ++i)
 	{
-		fread(&rest, 1, sizeof(struct vaht_mohawk_resource_table), archive->fd);
+		ret[i] = NULL;
+		read = fread(&rest, 1, sizeof(struct vaht_mohawk_resource_table), archive->fd);
+		if (read != sizeof(struct vaht_mohawk_resource_table))
+		{
+			vaht_resources_close(ret);
+			return NULL;
+		}
 		VAHT_SWAP_U16(rest.resource_id);
 		size_t savepos = ftell(archive->fd);
 		ret[i] = vaht_resource_open(archive, type, rest.resource_id);

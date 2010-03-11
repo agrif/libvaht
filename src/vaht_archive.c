@@ -20,8 +20,10 @@ vaht_archive* vaht_archive_open(const char* filename)
 	
 	vaht_get_endian();
 	
-	fread(&(ret->iff), 1, sizeof(struct vaht_mohawk_header_iff), ret->fd);
-	if (ret->iff.signature[0] != 'M' ||
+	uint32_t read;
+	read = fread(&(ret->iff), 1, sizeof(struct vaht_mohawk_header_iff), ret->fd);
+	if (read != sizeof(struct vaht_mohawk_header_iff) ||
+		ret->iff.signature[0] != 'M' ||
 	    ret->iff.signature[1] != 'H' ||
 	    ret->iff.signature[2] != 'W' ||
 	    ret->iff.signature[3] != 'K')
@@ -31,8 +33,9 @@ vaht_archive* vaht_archive_open(const char* filename)
 	}
 	VAHT_SWAP_U32(ret->iff.file_size);
 	
-	fread(&(ret->rsrc), 1, sizeof(struct vaht_mohawk_header_rsrc), ret->fd);
-	if (ret->rsrc.signature[0] != 'R' ||
+	read = fread(&(ret->rsrc), 1, sizeof(struct vaht_mohawk_header_rsrc), ret->fd);
+	if (read != sizeof(struct vaht_mohawk_header_rsrc) ||
+		ret->rsrc.signature[0] != 'R' ||
 	    ret->rsrc.signature[1] != 'S' ||
 	    ret->rsrc.signature[2] != 'R' ||
 	    ret->rsrc.signature[3] != 'C')
@@ -53,22 +56,33 @@ vaht_archive* vaht_archive_open(const char* filename)
 	}
 	
 	fseek(ret->fd, ret->rsrc.resource_dir_offset + ret->rsrc.file_table_offset, SEEK_SET);
-	fread(&(ret->file_table_entries), 1, sizeof(uint32_t), ret->fd);
+	read = fread(&(ret->file_table_entries), 1, sizeof(uint32_t), ret->fd);
 	VAHT_SWAP_U32(ret->file_table_entries);
 	
-	if (ret->file_table_entries != (ret->rsrc.file_table_size - 4) / sizeof(struct vaht_mohawk_file_table))
+	if (read != sizeof(uint32_t) ||
+		ret->file_table_entries != (ret->rsrc.file_table_size - 4) / sizeof(struct vaht_mohawk_file_table))
 	{
 		vaht_archive_close(ret);
 		return NULL;
 	}
 	
 	fseek(ret->fd, ret->rsrc.resource_dir_offset, SEEK_SET);
-	fread(&(ret->type_table_header), 1, sizeof(struct vaht_mohawk_header_type_table), ret->fd);
+	read = fread(&(ret->type_table_header), 1, sizeof(struct vaht_mohawk_header_type_table), ret->fd);
+	if (read != sizeof(struct vaht_mohawk_header_type_table))
+	{
+		vaht_archive_close(ret);
+		return NULL;
+	}
 	VAHT_SWAP_U16(ret->type_table_header.name_list_offset);
 	VAHT_SWAP_U16(ret->type_table_header.num_types);
 	
 	ret->type_table = malloc(sizeof(struct vaht_mohawk_type_table) * ret->type_table_header.num_types);
-	fread(ret->type_table, 1, sizeof(struct vaht_mohawk_type_table) * ret->type_table_header.num_types, ret->fd);
+	read = fread(ret->type_table, 1, sizeof(struct vaht_mohawk_type_table) * ret->type_table_header.num_types, ret->fd);
+	if (read != sizeof(struct vaht_mohawk_type_table) * ret->type_table_header.num_types)
+	{
+		vaht_archive_close(ret);
+		return NULL;
+	}
 	ret->resource_types = malloc(sizeof(char*) * ret->type_table_header.num_types);
 	for (i = 0; i < ret->type_table_header.num_types; ++i)
 	{
