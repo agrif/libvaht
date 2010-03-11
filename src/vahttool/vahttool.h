@@ -1,7 +1,7 @@
 #ifndef __INCLUDE_VAHTTOOL_H__
 #define __INCLUDE_VAHTTOOL_H__
 
-#include <vaht.h>
+#include <vaht/vaht.h>
 #include <stdio.h>
 
 #define VAHTTOOL_VERSION PACKAGE_VERSION
