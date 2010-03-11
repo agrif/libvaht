@@ -9,9 +9,9 @@
 #define B 0
 #define G 1
 #define R 2
-#define EMIT(r, g, b) ret->data[i] = (r); ++i; ret->data[i] = (g); ++i; ret->data[i] = (b); ++i;
+#define EMIT(r, g, b) bmp->data[i] = (r); ++i; bmp->data[i] = (g); ++i; bmp->data[i] = (b); ++i;
 #define EMITI(ind) idata[i] = (ind); ++i;
-#define READC(v) vaht_resource_read(resource, sizeof(uint8_t), &v);
+#define READC(v) vaht_resource_read(bmp->res, sizeof(uint8_t), &v);
 
 vaht_bmp* vaht_bmp_open(vaht_resource* resource)
 {
@@ -30,6 +30,7 @@ vaht_bmp* vaht_bmp_open(vaht_resource* resource)
 	
 	ret->width = header.width;
 	ret->height = header.height;
+	ret->bytes_per_row = header.bytes_per_row;
 	ret->data = NULL;
 	ret->datastart = vaht_resource_tell(resource);
 	ret->res = resource;
@@ -45,50 +46,56 @@ vaht_bmp* vaht_bmp_open(vaht_resource* resource)
 		ret->format |= 0x1;
 	}
 	
-	// rest of this (+ editing) should go to getdata
+	return ret;
+}
+
+uint8_t* vaht_bmp_data(vaht_bmp* bmp)
+{
+	if (bmp->data)
+		return bmp->data;
 	
-	ret->data = malloc(sizeof(uint8_t) * ret->width * ret->height * 3);
+	vaht_resource_seek(bmp->res, bmp->datastart);
+	bmp->data = malloc(sizeof(uint8_t) * bmp->width * bmp->height * 3);
 	
 	uint8_t t1, t2, t3;
 	unsigned int si, ut1, ut2;
 
 	
-	if (header.truecolor == 4)
+	if (vaht_bmp_truecolor(bmp))
 	{
-		ret->format |= 0x2;
-		for (ut2 = 0; ut2 < ret->height; ++ut2)
+		for (ut2 = 0; ut2 < bmp->height; ++ut2)
 		{
-			for (ut1 = 0; ut1 < ret->width; ++ut1)
+			for (ut1 = 0; ut1 < bmp->width; ++ut1)
 			{
 				READC(t3);
 				READC(t2);
 				READC(t1);
-				ret->data[(3 * ((ut2 * ret->width) + ut1)) + 0] = t1;
-				ret->data[(3 * ((ut2 * ret->width) + ut1)) + 1] = t2;
-				ret->data[(3 * ((ut2 * ret->width) + ut1)) + 2] = t3;
+				bmp->data[(3 * ((ut2 * bmp->width) + ut1)) + 0] = t1;
+				bmp->data[(3 * ((ut2 * bmp->width) + ut1)) + 1] = t2;
+				bmp->data[(3 * ((ut2 * bmp->width) + ut1)) + 2] = t3;
 			}
-			vaht_resource_read(resource, sizeof(uint8_t) * ret->width, NULL);
+			vaht_resource_read(bmp->res, sizeof(uint8_t) * bmp->width, NULL);
 		}
-		return ret;
+		return bmp->data;
 	}
 	
 	uint32_t u0;
-	vaht_resource_read(resource, sizeof(uint32_t), &u0);
+	vaht_resource_read(bmp->res, sizeof(uint32_t), &u0);
 	VAHT_SWAP_U16(u0); // should now be 0x030418FF
 	uint8_t* table = malloc(sizeof(uint8_t) * 256 * 3);
-	vaht_resource_read(resource, sizeof(uint8_t) * 256 * 3, table);
+	vaht_resource_read(bmp->res, sizeof(uint8_t) * 256 * 3, table);
 	// table is in BGR, BGR, BGR format, like truecolor
 	
 	unsigned int i = 0;
 	uint8_t c;
 	
-	if (header.compression != 4)
+	if (!vaht_bmp_compressed(bmp))
 	{
-		while (i < sizeof(uint8_t) * ret->width * ret->height * 3)
+		while (i < sizeof(uint8_t) * bmp->width * bmp->height * 3)
 		{
-			if ((i / 3) % ret->width == 0 && i != 0)
+			if ((i / 3) % bmp->width == 0 && i != 0)
 			{
-				ut1 = header.bytes_per_row - ret->width;
+				ut1 = bmp->bytes_per_row - bmp->width;
 				while (ut1 > 0)
 				{
 					READC(c);
@@ -98,10 +105,9 @@ vaht_bmp* vaht_bmp_open(vaht_resource* resource)
 			READC(c);
 			EMIT(COLOR(c, R), COLOR(c, G), COLOR(c, B));
 		}
-		return ret;
+		free(table);
+		return bmp->data;
 	}
-	
-	ret->format |= 0x1;
 	
 	// first 4 bytes are unknown, so ignore
 	READC(c); //EMIT(COLOR(c, R), COLOR(c, G), COLOR(c, B));
@@ -111,8 +117,8 @@ vaht_bmp* vaht_bmp_open(vaht_resource* resource)
 	
 	unsigned int scc = 0; // sub-command count, 0 when normal commands
 	int st1;
-	uint8_t* idata = malloc((ret->height * header.bytes_per_row * sizeof(uint8_t)));
-	while (i < ret->height * header.bytes_per_row)
+	uint8_t* idata = malloc((bmp->height * bmp->bytes_per_row * sizeof(uint8_t)));
+	while (i < bmp->height * bmp->bytes_per_row)
 	{
 		READC(c);
 		si = i;
@@ -355,18 +361,19 @@ vaht_bmp* vaht_bmp_open(vaht_resource* resource)
 	
 	i = 0;
 
-	while (i < ret->width * ret->height * 3)
+	while (i < bmp->width * bmp->height * 3)
 	{
-		si = (i / 3) / ret->width; // y
-		ut1 = (i / 3) % ret->width; // x
-		c = idata[(si * header.bytes_per_row) + ut1];
+		si = (i / 3) / bmp->width; // y
+		ut1 = (i / 3) % bmp->width; // x
+		c = idata[(si * bmp->bytes_per_row) + ut1];
 		//printf("%i\n", c);
 		EMIT(COLOR(c, R), COLOR(c, G), COLOR(c, B));
 	}
 
+	free(table);
 	free(idata);
 	
-	return ret;
+	return bmp->data;
 }
 
 void vaht_bmp_close(vaht_bmp* bmp)
@@ -385,11 +392,6 @@ uint16_t vaht_bmp_width(vaht_bmp* bmp)
 uint16_t vaht_bmp_height(vaht_bmp* bmp)
 {
 	return bmp->height;
-}
-
-uint8_t* vaht_bmp_data(vaht_bmp* bmp)
-{
-	return bmp->data;
 }
 
 uint8_t vaht_bmp_compressed(vaht_bmp* bmp)

@@ -1,5 +1,7 @@
 2010-03-10  Aaron Griffith  <aargri@gmail.com>
 
+	* src/vaht_bmp.c (vaht_bmp_data): started using lazy decompression
+
 	* include/doxygen.cfg: added doxygen to build system
 
 2010-03-09  Aaron Griffith  <aargri@gmail.com>
