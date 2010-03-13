@@ -105,6 +105,13 @@ vaht_wav* vaht_wav_open(vaht_resource* resource)
 		vaht_wav_close(ret);
 		return NULL;
 	}
+	
+	if (ret->encoding != tWAV_ADPCM)
+	{
+		fprintf(stderr, "Unsupported format...\n");
+		vaht_wav_close(ret);
+		return NULL;
+	}
 
 	return ret;
 }
