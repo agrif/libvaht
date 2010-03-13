@@ -124,6 +124,7 @@ struct vaht_wav_s
 	enum vaht_wav_encoding_t encoding;
 	uint8_t bits_per_sample;
 	uint8_t channels;
+	uint32_t data_seek;
 };
 
 #endif // __INCLUDE_VAHT_INTERN_H__

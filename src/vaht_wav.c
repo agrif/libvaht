@@ -47,6 +47,8 @@ static void handle_data(vaht_wav* wav, uint32_t chunk_size)
 		wav->encoding = tWAV_ADPCM;
 	else if (header.encoding == 2)
 		wav->encoding = tWAV_MP2;
+	
+	wav->data_seek = vaht_resource_tell(wav->res);
 }
 
 vaht_wav* vaht_wav_open(vaht_resource* resource)
@@ -122,4 +124,30 @@ void vaht_wav_close(vaht_wav* wav)
 		vaht_resource_close(wav->res);
 	
 	free(wav);
+}
+
+uint16_t vaht_wav_samplerate(vaht_wav* wav)
+{
+	return wav->sample_rate;
+}
+
+uint32_t vaht_wav_samplecount(vaht_wav* wav)
+{
+	return wav->sample_count;
+}
+
+
+uint8_t vaht_wav_samplesize(vaht_wav* wav)
+{
+	return wav->bits_per_sample;
+}
+
+uint8_t vaht_wav_channels(vaht_wav* wav)
+{
+	return wav->channels;
+}
+
+enum vaht_wav_encoding_t vaht_wav_encoding(vaht_wav* wav)
+{
+	return wav->encoding;
 }

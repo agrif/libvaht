@@ -14,5 +14,11 @@ enum vaht_wav_encoding_t
 
 vaht_wav* vaht_wav_open(vaht_resource* resource);
 void vaht_wav_close(vaht_wav* wav);
+uint16_t vaht_wav_samplerate(vaht_wav* wav);
+uint32_t vaht_wav_samplecount(vaht_wav* wav);
+// this is measured in BITS
+uint8_t vaht_wav_samplesize(vaht_wav* wav);
+uint8_t vaht_wav_channels(vaht_wav* wav);
+enum vaht_wav_encoding_t vaht_wav_encoding(vaht_wav* wav);
 
 #endif // __INCLUDE_VAHT_WAV_H__

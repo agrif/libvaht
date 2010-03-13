@@ -1,3 +1,7 @@
+2010-03-13  Aaron Griffith  <aargri@gmail.com>
+
+	* src/vaht_wav.c: added attribute getters
+
 2010-03-12  Aaron Griffith  <aargri@gmail.com>
 
 	* src/vahttool/convert-tWAV.c: added a dummy converter to test decoder
