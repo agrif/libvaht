@@ -16,6 +16,7 @@ struct vaht_archive_s;
 //! This is a typedef to avoid using structs everywhere in sources.
 //! This will always be dynamically allocated, so only refer to these
 //! as pointers.
+//! \sa vaht_archive_open
 typedef struct vaht_archive_s vaht_archive;
 
 //! open a mohawk archive
