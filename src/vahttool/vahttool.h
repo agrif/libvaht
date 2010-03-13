@@ -57,4 +57,7 @@ int vt_convert_tBMP_write(struct vt_options* opt, vaht_resource* res, char* path
 // convert-tMOV.c
 int vt_convert_tMOV_write(struct vt_options* opt, vaht_resource* res, char* path);
 
+// convect-tWAV.c
+int vt_convert_tWAV_write(struct vt_options* opt, vaht_resource* res, char* path);
+
 #endif /* __INCLUDE_VAHTTOOL_H__ */
