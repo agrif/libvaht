@@ -119,6 +119,11 @@ struct vaht_mov_s
 struct vaht_wav_s
 {
 	vaht_resource* res;
+	uint16_t sample_rate;
+	uint32_t sample_count;
+	enum vaht_wav_encoding_t encoding;
+	uint8_t bits_per_sample;
+	uint8_t channels;
 };
 
 #endif // __INCLUDE_VAHT_INTERN_H__
