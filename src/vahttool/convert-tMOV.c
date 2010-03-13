@@ -29,6 +29,8 @@ int vt_convert_tMOV_write(struct vt_options* opt, vaht_resource* res, char* path
 			break;
 	}
 	
+	free(buffer);
+	
 	fclose(fp);
 	vaht_mov_close(mov);
 	
