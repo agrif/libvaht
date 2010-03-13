@@ -1,3 +1,9 @@
+2010-03-12  Aaron Griffith  <aargri@gmail.com>
+
+	* src/vahttool/convert-tWAV.c: added a dummy converter to test decoder
+
+	* src/vaht_wav.c: added a start to the tWAV decoder
+
 2010-03-10  Aaron Griffith  <aargri@gmail.com>
 
 	* src/vaht_bmp.c (vaht_bmp_data): started using lazy decompression
