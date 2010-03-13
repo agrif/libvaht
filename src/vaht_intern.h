@@ -116,5 +116,10 @@ struct vaht_mov_s
 	uint8_t stco_count;
 };
 
+struct vaht_wav_s
+{
+	vaht_resource* res;
+};
+
 #endif // __INCLUDE_VAHT_INTERN_H__
 

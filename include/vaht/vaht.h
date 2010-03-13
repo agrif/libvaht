@@ -5,5 +5,6 @@
 #include "vaht_resource.h"
 #include "vaht_bmp.h"
 #include "vaht_mov.h"
+#include "vaht_wav.h"
 
 #endif // __INCLUDE_VAHT_H__
