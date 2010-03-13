@@ -1,5 +1,11 @@
 2010-03-13  Aaron Griffith  <aargri@gmail.com>
 
+	* src/vahttool/convert-tWAV.c (vt_convert_tWAV_write): added WAV output
+	headers to the tWAV converter.
+
+	* src/vahttool/convert-tMOV.c (vt_convert_tMOV_write): patched up a
+	memory leak involving the read buffer.
+
 	* src/vaht_wav.c: added attribute getters
 
 2010-03-12  Aaron Griffith  <aargri@gmail.com>
