@@ -1,4 +1,4 @@
-AC_INIT(libvaht, 0.2, aargri@gmail.com)
+AC_INIT(libvaht, 0.3, aargri@gmail.com)
 
 # make sure our source dir is correct
 AC_CONFIG_SRCDIR([src/vaht_archive.c])
