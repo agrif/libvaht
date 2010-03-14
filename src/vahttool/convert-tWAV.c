@@ -59,8 +59,7 @@ int vt_convert_tWAV_write(struct vt_options* opt, vaht_resource* res, char* path
 	
 	while (1)
 	{
-		//uint32_t read = vaht_wav_read(wav, bufsize, buffer);
-		uint32_t read = 0;
+		uint32_t read = vaht_wav_read(wav, bufsize, buffer);
 		fwrite(buffer, sizeof(uint8_t), read, fp);
 		if (read != bufsize)
 			break;

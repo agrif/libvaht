@@ -20,5 +20,8 @@ uint32_t vaht_wav_samplecount(vaht_wav* wav);
 uint8_t vaht_wav_samplesize(vaht_wav* wav);
 uint8_t vaht_wav_channels(vaht_wav* wav);
 enum vaht_wav_encoding_t vaht_wav_encoding(vaht_wav* wav);
+// size MUST BE a multiple of 4 (weird, huh)
+uint32_t vaht_wav_read(vaht_wav* wav, uint32_t size, void* buffer);
+void vaht_wav_reset(vaht_wav* wav);
 
 #endif // __INCLUDE_VAHT_WAV_H__

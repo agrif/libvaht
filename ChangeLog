@@ -1,5 +1,7 @@
 2010-03-13  Aaron Griffith  <aargri@gmail.com>
 
+	* src/vaht_wav.c: added ADPCM decoder
+
 	* src/vahttool/convert-tWAV.c (vt_convert_tWAV_write): added WAV output
 	headers to the tWAV converter.
 
