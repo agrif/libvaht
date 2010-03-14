@@ -1,3 +1,21 @@
+2010-03-13  Aaron Griffith  <aargri@gmail.com>
+
+	* src/vaht_wav.c: added ADPCM decoder
+
+	* src/vahttool/convert-tWAV.c (vt_convert_tWAV_write): added WAV output
+	headers to the tWAV converter.
+
+	* src/vahttool/convert-tMOV.c (vt_convert_tMOV_write): patched up a
+	memory leak involving the read buffer.
+
+	* src/vaht_wav.c: added attribute getters
+
+2010-03-12  Aaron Griffith  <aargri@gmail.com>
+
+	* src/vahttool/convert-tWAV.c: added a dummy converter to test decoder
+
+	* src/vaht_wav.c: added a start to the tWAV decoder
+
 2010-03-10  Aaron Griffith  <aargri@gmail.com>
 
 	* src/vaht_bmp.c (vaht_bmp_data): started using lazy decompression

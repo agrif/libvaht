@@ -116,5 +116,25 @@ struct vaht_mov_s
 	uint8_t stco_count;
 };
 
+struct vaht_wav_adpcm_decode_state
+{
+	int32_t index;
+	int32_t predictor;
+	uint16_t step;
+};
+
+struct vaht_wav_s
+{
+	vaht_resource* res;
+	uint16_t sample_rate;
+	uint32_t sample_count;
+	enum vaht_wav_encoding_t encoding;
+	uint8_t bits_per_sample;
+	uint8_t channels;
+	uint32_t data_seek;
+	
+	struct vaht_wav_adpcm_decode_state* adpcm_state[2];
+};
+
 #endif // __INCLUDE_VAHT_INTERN_H__
 
