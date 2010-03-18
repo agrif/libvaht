@@ -69,6 +69,7 @@ int vt_options_parse(struct vt_options* opt, int argc, char** argv)
 		{"convert", no_argument, 0, 'c'},
 		{"type", required_argument, 0, 't'},
 		{"id", required_argument, 0, 'i'},
+		{0, 0, 0, 0}
 	};
 	
 	int option_index = 0;

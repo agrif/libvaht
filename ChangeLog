@@ -1,3 +1,8 @@
+2010-03-18  Aaron Griffith  <aargri@gmail.com>
+
+	* src/vahttool/options.c (vt_options_parse): added missing end-of-list
+	marker to long_options
+
 2010-03-13  Aaron Griffith  <aargri@gmail.com>
 
 	* src/vaht_wav.c: added ADPCM decoder
