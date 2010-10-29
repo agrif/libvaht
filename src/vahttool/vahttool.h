@@ -60,4 +60,7 @@ int vt_convert_tMOV_write(struct vt_options* opt, vaht_resource* res, char* path
 // convect-tWAV.c
 int vt_convert_tWAV_write(struct vt_options* opt, vaht_resource* res, char* path);
 
+// convect-NAME.c
+int vt_convert_NAME_write(struct vt_options* opt, vaht_resource* res, char* path);
+
 #endif /* __INCLUDE_VAHTTOOL_H__ */
