@@ -154,6 +154,8 @@ static char* get_ext(struct vt_options* opt, const char* type)
 		return "wav";
 	if (strcmp("NAME", type) == 0)
 		return "txt";
+	if (strcmp("CARD", type) == 0)
+		return "txt";
 	return NULL;
 }
 
@@ -173,6 +175,8 @@ static int write_resource(struct vt_options* opt, vaht_resource* res, char* path
 			return vt_convert_tWAV_write(opt, res, path);
 		if (strcmp("NAME", type) == 0)
 			return vt_convert_NAME_write(opt, res, path);
+		if (strcmp("CARD", type) == 0)
+			return vt_convert_CARD_write(opt, res, path);
 		return 0;
 	}
 	

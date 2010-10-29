@@ -8,8 +8,9 @@ void vaht_get_endian();
 uint16_t vaht_swap_uint16(uint16_t in);
 uint32_t vaht_swap_uint32(uint32_t in);
 
-#define VAHT_SWAP_U16(v) v = vaht_swap_uint16(v)
-#define VAHT_SWAP_U32(v) v = vaht_swap_uint32(v)
+#define VAHT_SWAP_U16(v) (v) = vaht_swap_uint16(v)
+#define VAHT_SWAP_U32(v) (v) = vaht_swap_uint32(v)
+#define VAHT_SWAP_S16(v) (v) = (int16_t)vaht_swap_uint16((uint16_t)(v))
 
 struct vaht_mohawk_header_iff
 {
@@ -140,6 +141,17 @@ struct vaht_name_s
 {
 	vaht_resource* res;
 	uint16_t count;
+};
+
+struct vaht_card_s
+{
+	vaht_resource* res;
+	int16_t name_rec; /* index into NAME 1 if >= 0 */
+
+    /* if non-0, this is a zip mode destination */
+	uint16_t zip_mode_place;
+	
+	/* FIXME card scripts */
 };
 
 #endif /* __INCLUDE_VAHT_INTERN_H__ */

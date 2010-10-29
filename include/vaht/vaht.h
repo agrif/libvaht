@@ -14,5 +14,6 @@
 #include "vaht_mov.h"
 #include "vaht_wav.h"
 #include "vaht_name.h"
+#include "vaht_card.h"
 
 #endif /* __INCLUDE_VAHT_H__ */
