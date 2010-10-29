@@ -38,13 +38,20 @@ static char* construct_path(vaht_resource* res, char* out, const char* ext)
 {
 	const char* origname = vaht_resource_name(res);
 	char* name = NULL;
-	if (strlen(name) > 0)
+	if (strlen(origname) > 0)
 		name = make_path_safe(origname);
+
+	uint32_t name_len = 0;
+	if (name)
+	{
+		name_len = strlen(name);
+	}
+	
 	/* 11 = 4 + 1 + ... + 1 + 4 + 1
 	 * that is
 	 * '0000.[stuff].type\0'
 	 */
-	char* filename = malloc(sizeof(char) * (strlen(name) + 11));
+	char* filename = malloc(sizeof(char) * (name_len + 11));
 	
 	const char* type = vaht_resource_type(res);
 	if (ext == NULL)
