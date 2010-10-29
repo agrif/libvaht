@@ -64,3 +64,16 @@ uint16_t vaht_card_zip_mode(vaht_card* card)
 {
 	return card->zip_mode_place;
 }
+
+vaht_plst* vaht_card_plst_open(vaht_card* card)
+{
+	/* open the PLST */
+	vaht_resource* plst_res = vaht_resource_open(card->res->archive, "PLST", card->res->id);
+	if (!plst_res)
+		return NULL;
+	
+	vaht_plst* plst = vaht_plst_open(plst_res);
+	vaht_resource_close(plst_res);
+	
+	return plst;
+}

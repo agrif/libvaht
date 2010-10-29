@@ -155,5 +155,22 @@ struct vaht_card_s
 	/* FIXME card scripts */
 };
 
+struct vaht_plst_record
+{
+	uint16_t index;
+	uint16_t bitmap_id;
+	uint16_t left;
+	uint16_t top;
+	uint16_t right;
+	uint16_t bottom;
+};
+
+struct vaht_plst_s
+{
+	vaht_resource* res;
+	uint16_t count;
+	struct vaht_plst_record* records;
+};
+
 #endif /* __INCLUDE_VAHT_INTERN_H__ */
 

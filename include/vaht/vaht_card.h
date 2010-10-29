@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include "vaht_resource.h"
+#include "vaht_plst.h"
 
 /**
  * \defgroup vaht_card_group Cards
@@ -88,6 +89,19 @@ const char* vaht_card_name(vaht_card* card);
  * \return 0 if the card is normal, 1 (usually) if it's zip-enabled
  */
 uint16_t vaht_card_zip_mode(vaht_card* card);
+
+/**
+ * \brief get the associated Picture List for this card
+ *
+ * This will get the PLST resource associated with this card -- it's
+ * the one with the same id as the card. If for some reason it does
+ * not exist, this function returns NULL. You are responsible for
+ * closing this when you're done with it!
+ *
+ * \param card the CARD to get the list for
+ * \return the PLST resource, or NULL
+ */
+vaht_plst* vaht_card_plst_open(vaht_card* card);
 
 /**
  * @}
