@@ -63,7 +63,7 @@ uint16_t vaht_name_count(vaht_name* name);
  *
  * This function will return a name from the name index.
  * \param name the NAME object to index into
- * \param the index, up to (and including) count - 1
+ * \param i the index, up to (and including) count - 1
  * \return the string (which MUST be free'd when you are done)
  * \sa vaht_name_count
  */
