@@ -1,4 +1,5 @@
 #include "vahttool.h"
+#include <stdlib.h>
 
 int vt_convert_NAME_write(struct vt_options* opt, vaht_resource* res, char* path)
 {
@@ -18,6 +19,14 @@ int vt_convert_NAME_write(struct vt_options* opt, vaht_resource* res, char* path
 	}
 	
 	/* do the conversion */
+	uint16_t count = vaht_name_count(name);
+	uint16_t i;
+	for (i = 0; i < count; i++)
+	{
+		char* str = vaht_name_get(name, i);
+		fprintf(fp, "%i %s\n", i, str);
+		free(str);
+	}
 	
 	fclose(fp);
 	vaht_name_close(name);

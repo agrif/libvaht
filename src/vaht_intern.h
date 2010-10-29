@@ -139,6 +139,7 @@ struct vaht_wav_s
 struct vaht_name_s
 {
 	vaht_resource* res;
+	uint16_t count;
 };
 
 #endif // __INCLUDE_VAHT_INTERN_H__

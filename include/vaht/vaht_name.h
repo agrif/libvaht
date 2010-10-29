@@ -22,6 +22,9 @@ typedef struct vaht_name_s vaht_name;
 
 vaht_name* vaht_name_open(vaht_resource* resource);
 void vaht_name_close(vaht_name* name);
+uint16_t vaht_name_count(vaht_name* name);
+// returned string must be freed
+char* vaht_name_get(vaht_name* name, uint16_t i);
 
 //! @}
 
