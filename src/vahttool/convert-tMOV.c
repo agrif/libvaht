@@ -24,8 +24,8 @@ int vt_convert_tMOV_write(struct vt_options* opt, vaht_resource* res, char* path
 	while (1)
 	{
 		uint32_t read = vaht_mov_read(mov, bufsize, buffer);
-		fwrite(buffer, sizeof(uint8_t), read, fp);
-		if (read != bufsize)
+		uint32_t written = fwrite(buffer, sizeof(uint8_t), read, fp);
+		if (read != written || read != bufsize)
 			break;
 	}
 	

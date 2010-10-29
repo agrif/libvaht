@@ -175,8 +175,8 @@ static int write_resource(struct vt_options* opt, vaht_resource* res, char* path
 	while (1)
 	{
 		uint32_t read = vaht_resource_read(res, bufsize, buffer);
-		fwrite(buffer, sizeof(uint8_t), read, f);
-		if (read != bufsize)
+		uint32_t written = fwrite(buffer, sizeof(uint8_t), read, f);
+		if (read != written || read != bufsize)
 			break;
 	}
 	

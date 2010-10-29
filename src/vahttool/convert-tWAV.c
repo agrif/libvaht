@@ -21,6 +21,7 @@ int vt_convert_tWAV_write(struct vt_options* opt, vaht_resource* res, char* path
 	
 	uint32_t tmp32;
 	uint16_t tmp16;
+	uint32_t written;
 
 	// bytes per sample
 	uint8_t bps = vaht_wav_samplesize(wav) / 8;
@@ -28,30 +29,48 @@ int vt_convert_tWAV_write(struct vt_options* opt, vaht_resource* res, char* path
 	// write out the WAV headers
 	fprintf(fp, "RIFF");
 	tmp32 = 36 + (vaht_wav_channels(wav) * vaht_wav_samplecount(wav) * bps);
-	fwrite(&tmp32, sizeof(uint32_t), 1, fp);
+	written = fwrite(&tmp32, sizeof(uint32_t), 1, fp);
+	if (written != sizeof(uint32_t))
+		return 1;
 	fprintf(fp, "WAVE");
 	
 	// WAV headers: format
 	fprintf(fp, "fmt ");
 	tmp32 = 16;
-	fwrite(&tmp32, sizeof(uint32_t), 1, fp);
+	written = fwrite(&tmp32, sizeof(uint32_t), 1, fp);
+	if (written != sizeof(uint32_t))
+		return 1;
 	tmp16 = 1;
-	fwrite(&tmp16, sizeof(uint16_t), 1, fp);
+	written = fwrite(&tmp16, sizeof(uint16_t), 1, fp);
+	if (written != sizeof(uint16_t))
+		return 1;
 	tmp16 = vaht_wav_channels(wav);
-	fwrite(&tmp16, sizeof(uint16_t), 1, fp);
+	written = fwrite(&tmp16, sizeof(uint16_t), 1, fp);
+	if (written != sizeof(uint16_t))
+		return 1;
 	tmp32 = vaht_wav_samplerate(wav);
-	fwrite(&tmp32, sizeof(uint32_t), 1, fp);
+	written = fwrite(&tmp32, sizeof(uint32_t), 1, fp);
+	if (written != sizeof(uint32_t))
+		return 1;
 	tmp32 = vaht_wav_samplerate(wav) * vaht_wav_channels(wav) * bps;
-	fwrite(&tmp32, sizeof(uint32_t), 1, fp);
+	written = fwrite(&tmp32, sizeof(uint32_t), 1, fp);
+	if (written != sizeof(uint32_t))
+		return 1;
 	tmp16 = vaht_wav_channels(wav) * bps;
-	fwrite(&tmp16, sizeof(uint16_t), 1, fp);
+	written = fwrite(&tmp16, sizeof(uint16_t), 1, fp);
+	if (written != sizeof(uint16_t))
+		return 1;
 	tmp16 = vaht_wav_samplesize(wav);
-	fwrite(&tmp16, sizeof(uint16_t), 1, fp);
+	written = fwrite(&tmp16, sizeof(uint16_t), 1, fp);
+	if (written != sizeof(uint16_t))
+		return 1;
 	
 	// WAV headers: data
 	fprintf(fp, "data");
 	tmp32 = vaht_wav_samplecount(wav) * vaht_wav_channels(wav) * bps;
-	fwrite(&tmp32, sizeof(uint32_t), 1, fp);
+	written = fwrite(&tmp32, sizeof(uint32_t), 1, fp);
+	if (written != sizeof(uint32_t))
+		return 1;
 	
 	// what follows... data
 	uint32_t bufsize = 1024; // a multiple of 4 (!!!)
@@ -60,8 +79,8 @@ int vt_convert_tWAV_write(struct vt_options* opt, vaht_resource* res, char* path
 	while (1)
 	{
 		uint32_t read = vaht_wav_read(wav, bufsize, buffer);
-		fwrite(buffer, sizeof(uint8_t), read, fp);
-		if (read != bufsize)
+		written = fwrite(buffer, sizeof(uint8_t), read, fp);
+		if (written != read || read != bufsize)
 			break;
 	}
 	

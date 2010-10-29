@@ -24,6 +24,7 @@ int vt_convert_tBMP_write(struct vt_options* opt, vaht_resource* res, char* path
 	
 	png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
 	info_ptr = png_create_info_struct(png_ptr);
+	/*
 	if (setjmp(png_ptr->jmpbuf))
 	{
 		vt_error(opt, "PNG write error on: %s", path);
@@ -31,6 +32,7 @@ int vt_convert_tBMP_write(struct vt_options* opt, vaht_resource* res, char* path
 		fclose(fp);
 		return 1;
 	}
+	*/
 	
 	png_init_io(png_ptr, fp);
 	png_set_IHDR(png_ptr, info_ptr, vaht_bmp_width(bmp), vaht_bmp_height(bmp),
