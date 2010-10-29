@@ -146,6 +146,7 @@ struct vaht_name_s
 struct vaht_card_s
 {
 	vaht_resource* res;
+	char* cached_name;
 	int16_t name_rec; /* index into NAME 1 if >= 0 */
 
     /* if non-0, this is a zip mode destination */

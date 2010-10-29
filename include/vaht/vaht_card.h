@@ -49,6 +49,47 @@ vaht_card* vaht_card_open(vaht_resource* resource);
 void vaht_card_close(vaht_card* card);
 
 /**
+ * \brief get the name record of this card
+ *
+ * This returns the record index in NAME resource 1 that corresponds
+ * to this card, or a negative number signalling this card has no
+ * special name. There is also the convenience function
+ * vaht_card_name() to get this name for you, and cache it.
+ *
+ * \param card the CARD to get the name record for
+ * \return the record in NAME resource 1
+ * \sa vaht_card_name
+ */
+int16_t vaht_card_name_record(vaht_card* card);
+
+/**
+ * \brief get the name of this card
+ *
+ * This returns the name associated with this card, which is distinct
+ * from the resource name. It performs the appropriate NAME resource
+ * lookup for you, and caches the result (subsequent calls are less
+ * expensive).
+ *
+ * \param card the CARD to get the name of
+ * \return the name, as a string (or NULL for no name)
+ * \sa vaht_card_name_record
+ */
+const char* vaht_card_name(vaht_card* card);
+
+/**
+ * \brief get whether this card is zip-enabled
+ *
+ * This will return non-zero if this card can be used as a zip-mode
+ * destination. Engines should keep track of visits to this card, so
+ * they know when zip hotspots are usable (if their card has been
+ * visited).
+ *
+ * \param card the CARD to check for zip status
+ * \return 0 if the card is normal, 1 (usually) if it's zip-enabled
+ */
+uint16_t vaht_card_zip_mode(vaht_card* card);
+
+/**
  * @}
  */
 
