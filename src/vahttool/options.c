@@ -107,7 +107,8 @@ int vt_options_parse(struct vt_options* opt, int argc, char** argv)
 			break;
 		case 't':
 			opt->filter_type = malloc(sizeof(char) * 5);
-			strcpy(opt->filter_type, optarg);
+			memcpy(opt->filter_type, optarg, 4);
+			opt->filter_type[4] = 0;
 			break;
 		case 'i':
 			opt->filter_id = atoi(optarg);
