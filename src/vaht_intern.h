@@ -136,5 +136,10 @@ struct vaht_wav_s
 	struct vaht_wav_adpcm_decode_state* adpcm_state[2];
 };
 
+struct vaht_name_s
+{
+	vaht_resource* res;
+};
+
 #endif // __INCLUDE_VAHT_INTERN_H__
 
