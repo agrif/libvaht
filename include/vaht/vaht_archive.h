@@ -70,7 +70,7 @@ uint16_t vaht_archive_get_resource_types(vaht_archive* archive);
 //! \param i the index of the resource type to get
 //! \return a string type name (ex. "tBMP")
 //! \sa vaht_archive_get_resource_types
-char* vaht_archive_get_resource_type(vaht_archive* archive, uint16_t i);
+const char* vaht_archive_get_resource_type(vaht_archive* archive, uint16_t i);
 
 //! @}
 

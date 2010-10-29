@@ -241,12 +241,12 @@ uint32_t vaht_resource_read(vaht_resource* resource, uint32_t size, void* buffer
 	return read;
 }
 
-char* vaht_resource_name(vaht_resource* resource)
+const char* vaht_resource_name(vaht_resource* resource)
 {
 	return resource->name;
 }
 
-char* vaht_resource_type(vaht_resource* resource)
+const char* vaht_resource_type(vaht_resource* resource)
 {
 	return resource->archive->resource_types[resource->typei];
 }

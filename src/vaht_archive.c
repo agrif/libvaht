@@ -134,7 +134,7 @@ uint16_t vaht_archive_get_resource_types(vaht_archive* archive)
 	return archive->type_table_header.num_types;
 }
 
-char* vaht_archive_get_resource_type(vaht_archive* archive, uint16_t i)
+const char* vaht_archive_get_resource_type(vaht_archive* archive, uint16_t i)
 {
 	return archive->resource_types[i];
 }

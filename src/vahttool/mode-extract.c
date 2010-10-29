@@ -6,7 +6,7 @@
 #include <errno.h>
 
 // these MUST BE FREED!
-static char* path_join(char* base, char* tail)
+static char* path_join(const char* base, const char* tail)
 {
 	// this is a hack, sort of. I don't know how cross-platform it is
 	// oh well...
@@ -17,7 +17,7 @@ static char* path_join(char* base, char* tail)
 }
 
 // also must be freed
-static char* make_path_safe(char* name)
+static char* make_path_safe(const char* name)
 {
 	char* ret = malloc(sizeof(char) * (strlen(name) + 1));
 	strcpy(ret, name);
@@ -33,21 +33,22 @@ static char* make_path_safe(char* name)
 }
 
 // still needs freeing!
-static char* construct_path(vaht_resource* res, char* out, char* ext)
+static char* construct_path(vaht_resource* res, char* out, const char* ext)
 {
-	char* name = vaht_resource_name(res);
+	const char* origname = vaht_resource_name(res);
+	char* name = NULL;
 	if (strlen(name) > 0)
-		name = make_path_safe(name);
+		name = make_path_safe(origname);
 	// 11 = 4 + 1 + ... + 1 + 4 + 1
 	// that is
 	// '0000.[stuff].type\0'
 	char* filename = malloc(sizeof(char) * (strlen(name) + 11));
 	
-	char* type = vaht_resource_type(res);
+	const char* type = vaht_resource_type(res);
 	if (ext == NULL)
 		ext = type;
 	
-	if (strlen(name) > 0)
+	if (name)
 	{
 		sprintf(filename, "%04i.%s.%s", vaht_resource_id(res), name, ext);
 	} else {
@@ -55,7 +56,7 @@ static char* construct_path(vaht_resource* res, char* out, char* ext)
 	}
 	
 	// we don't need this anymore
-	if (strlen(name) > 0)
+	if (name)
 	{
 		free(name);
 		name = NULL;
@@ -131,7 +132,7 @@ static int create_directory(struct vt_options* opt, char* name)
 	return 0;
 }
 
-static char* get_ext(struct vt_options* opt, char* type)
+static char* get_ext(struct vt_options* opt, const char* type)
 {
 	if (opt->convert == 0)
 		return NULL;
@@ -150,7 +151,7 @@ static int write_resource(struct vt_options* opt, vaht_resource* res, char* path
 {
 	if (opt->convert)
 	{
-		char* type = vaht_resource_type(res);
+		const char* type = vaht_resource_type(res);
 		
 		vt_inform(opt, " %s", path);
 		
@@ -194,7 +195,7 @@ static int extract_archive(struct vt_options* opt, vaht_archive* archive, char* 
 	unsigned int t;
 	for (t = 0; t < resource_types_count; t++)
 	{
-		char* type = vaht_archive_get_resource_type(archive, t);
+		const char* type = vaht_archive_get_resource_type(archive, t);
 		
 		// check if we pass the type filter
 		if (opt->filter_type != NULL && strcmp(opt->filter_type, type) != 0)

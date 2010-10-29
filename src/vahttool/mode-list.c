@@ -9,7 +9,7 @@ static void list_files(struct vt_options* opt, vaht_archive* archive)
 	unsigned int t;
 	for (t = 0; t < resource_types_count; t++)
 	{
-		char* type = vaht_archive_get_resource_type(archive, t);
+		const char* type = vaht_archive_get_resource_type(archive, t);
 		
 		// check if we pass the type filter
 		if (opt->filter_type != NULL && strcmp(opt->filter_type, type) != 0)

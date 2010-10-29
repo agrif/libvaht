@@ -82,7 +82,7 @@ void vaht_resources_close(vaht_resource** resources);
 //! \param resource the resource to get a name for
 //! \return the resource's name
 //! \sa vaht_resource_type vaht_resource_id
-char* vaht_resource_name(vaht_resource* resource);
+const char* vaht_resource_name(vaht_resource* resource);
 
 //! get the resource type
 
@@ -91,7 +91,7 @@ char* vaht_resource_name(vaht_resource* resource);
 //! \param resource the resource who's type you want
 //! \return the resource's type
 //! \sa vaht_resource_name vaht_resource_id
-char* vaht_resource_type(vaht_resource* resource);
+const char* vaht_resource_type(vaht_resource* resource);
 
 //! get the resource ID
 
