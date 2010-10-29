@@ -19,6 +19,9 @@ int vt_convert_CARD_write(struct vt_options* opt, vaht_resource* res, char* path
 	}
 	
 	/* do the conversion */
+	fprintf(fp, "Name: %i %s\n", vaht_card_name_record(card), vaht_card_name(card));
+	fprintf(fp, "Zip: %i\n", vaht_card_zip_mode(card));
+	/* FIXME scripts */
 
 	fclose(fp);
 	vaht_card_close(card);
