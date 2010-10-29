@@ -32,6 +32,9 @@ int main(int argc, char** argv)
 	vt_options_free(&opt);
 	
 	if (error > 0)
+	{
+		vt_error(&opt, "Aborting.");
 		return error;
+	}
 	return 0;
 }
