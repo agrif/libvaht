@@ -20,7 +20,7 @@ static uint16_t adpcm_step_table[89] = {
 	15289, 16818, 18500, 20350, 22385, 24623, 27086, 29794, 32767 
 };
 
-// turn a step, (signed) nibble into a delta
+/* turn a step, (signed) nibble into a delta */
 static inline int32_t adpcm_delta(uint16_t step, uint8_t n)
 {
 	int32_t delta = step >> 3;
@@ -31,7 +31,7 @@ static inline int32_t adpcm_delta(uint16_t step, uint8_t n)
 	if (n & (1 << 2))
 		delta += (step >> 0);
 	
-	// sign bit
+	/* sign bit */
 	if (n & (1 << 3))
 		return -delta;
 	return delta;
@@ -39,13 +39,13 @@ static inline int32_t adpcm_delta(uint16_t step, uint8_t n)
 
 static inline uint32_t adpcm_read(vaht_wav* wav, uint32_t size, void* buffer)
 {
-	// input buffer, 4 bits per sample, (size / 4) bytes
+	/* input buffer, 4 bits per sample, (size / 4) bytes */
 	uint32_t insize = size / 4;
 	uint8_t* input = malloc(sizeof(uint8_t) * insize);
 	
 	insize = vaht_resource_read(wav->res, insize, input);
 	
-	// output buffer, 16 bits per sample, insize * 2 samples
+	/* output buffer, 16 bits per sample, insize * 2 samples */
 	int16_t* output = buffer;
 	uint16_t outcount = insize * 2;
 	
@@ -54,27 +54,27 @@ static inline uint32_t adpcm_read(vaht_wav* wav, uint32_t size, void* buffer)
 	{
 		uint8_t nibble = input[i / 2];
 		
-		// select the correct nibble from the byte
+		/* select the correct nibble from the byte */
 		nibble &= 0x0F << (4 * (i % 2));
 		nibble = nibble >> (4 * (i % 2));
 		
-		// do a decode loop
+		/* do a decode loop */
 		
 		struct vaht_wav_adpcm_decode_state* state = wav->adpcm_state[i % 2];
 		
 		state->index += adpcm_index_table[nibble];
-		// clamp index to [0, 88]
+		/* clamp index to [0, 88] */
 		state->index = state->index > 88 ? 88 : state->index;
 		state->index = state->index < 0 ? 0 : state->index;
 		
 		state->predictor += adpcm_delta(state->step, nibble);
-		// clamp predictor to [-32768, 32767]
+		/* clamp predictor to [-32768, 32767] */
 		state->predictor = state->predictor > 32767 ? 32767 : state->predictor;
 		state->predictor = state->predictor < -32768 ? -32768 : state->predictor;
 		
 		state->step = adpcm_step_table[state->index];
 		
-		// write our sample
+		/* write our sample */
 		output[i] = state->predictor;
 	}
 	
@@ -85,14 +85,14 @@ static inline uint32_t adpcm_read(vaht_wav* wav, uint32_t size, void* buffer)
 
 static inline void handle_skip(vaht_wav* wav, uint32_t chunk_size)
 {
-	// this chunk provides us NO useful info, so skip
+	/* this chunk provides us NO useful info, so skip */
 	uint32_t pos = vaht_resource_tell(wav->res);
 	vaht_resource_seek(wav->res, pos + chunk_size);
 }
 
 static inline void handle_data(vaht_wav* wav, uint32_t chunk_size)
 {
-	// this chunk_size LIES, so fix it up
+	/* this chunk_size LIES, so fix it up */
 	chunk_size -= 8;
 	
 	struct
@@ -205,7 +205,7 @@ vaht_wav* vaht_wav_open(vaht_resource* resource)
 		return NULL;
 	}
 
-	// prepare to decode
+	/* prepare to decode */
 	vaht_wav_reset(ret);
 	
 	return ret;
@@ -252,8 +252,9 @@ enum vaht_wav_encoding_t vaht_wav_encoding(vaht_wav* wav)
 
 uint32_t vaht_wav_read(vaht_wav* wav, uint32_t size, void* buffer)
 {
-	// our arcane restriction so that ADPCM decoding always ends on a byte
-	// boundary
+	/* our arcane restriction so that ADPCM decoding always ends on a byte
+	 * boundary
+	 */
 	if (size % 4 != 0)
 		return 0;
 	

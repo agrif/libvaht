@@ -5,18 +5,19 @@
 #include <sys/stat.h>
 #include <errno.h>
 
-// these MUST BE FREED!
+/* these MUST BE FREED! */
 static char* path_join(const char* base, const char* tail)
 {
-	// this is a hack, sort of. I don't know how cross-platform it is
-	// oh well...
+	/* this is a hack, sort of. I don't know how cross-platform it is
+	 * oh well...
+	 */
 	
 	char* ret = malloc(sizeof(char) * (strlen(base) + strlen(tail) + 2));
 	sprintf(ret, "%s/%s", base, tail);
 	return ret;
 }
 
-// also must be freed
+/* also must be freed */
 static char* make_path_safe(const char* name)
 {
 	char* ret = malloc(sizeof(char) * (strlen(name) + 1));
@@ -24,7 +25,7 @@ static char* make_path_safe(const char* name)
 	unsigned int i;
 	for (i = 0; i < strlen(ret); i++)
 	{
-		// we should add more checks
+		/* we should add more checks */
 		if (ret[i] == '/')
 			ret[i] = '-';
 	}
@@ -32,16 +33,17 @@ static char* make_path_safe(const char* name)
 	return ret;
 }
 
-// still needs freeing!
+/* still needs freeing! */
 static char* construct_path(vaht_resource* res, char* out, const char* ext)
 {
 	const char* origname = vaht_resource_name(res);
 	char* name = NULL;
 	if (strlen(name) > 0)
 		name = make_path_safe(origname);
-	// 11 = 4 + 1 + ... + 1 + 4 + 1
-	// that is
-	// '0000.[stuff].type\0'
+	/* 11 = 4 + 1 + ... + 1 + 4 + 1
+	 * that is
+	 * '0000.[stuff].type\0'
+	 */
 	char* filename = malloc(sizeof(char) * (strlen(name) + 11));
 	
 	const char* type = vaht_resource_type(res);
@@ -55,7 +57,7 @@ static char* construct_path(vaht_resource* res, char* out, const char* ext)
 		sprintf(filename, "%04i.%s", vaht_resource_id(res), ext);
 	}
 	
-	// we don't need this anymore
+	/* we don't need this anymore */
 	if (name)
 	{
 		free(name);
@@ -76,7 +78,7 @@ static char* construct_path(vaht_resource* res, char* out, const char* ext)
 	return path;
 }
 
-// this also requires freeing!
+/* this also requires freeing! */
 static char* construct_output_path(struct vt_options* opt, char* out, char* archivename)
 {
 	char* basename = malloc(sizeof(char) * (strlen(archivename) + 1));
@@ -96,16 +98,17 @@ static char* construct_output_path(struct vt_options* opt, char* out, char* arch
 			endchar = i;
 	}
 	
-	// sanity checks
+	/* sanity checks */
 	if (startchar >= endchar)
 	{
-		// something funky happened
+		/* something funky happened */
 		return NULL;
 	}
 	
-	// startchar is now set to the char after the last '/' (or 0)
-	// endchar is now set to the last '.' (or the end)
-	// AND endchar - startchar > 0
+	/* startchar is now set to the char after the last '/' (or 0)
+	 * endchar is now set to the last '.' (or the end)
+	 * AND endchar - startchar > 0
+	 */
 	
 	for (i = startchar; i < endchar; i++)
 	{
@@ -123,7 +126,7 @@ static char* construct_output_path(struct vt_options* opt, char* out, char* arch
 
 static int create_directory(struct vt_options* opt, char* name)
 {
-	// we set all permissions, umask will handle the rest
+	/* we set all permissions, umask will handle the rest */
 	if (mkdir(name, S_IRWXU | S_IRWXG | S_IRWXO) == -1 && errno != EEXIST)
 	{
 		vt_error(opt, "could not make directory: %s", name);
@@ -197,15 +200,16 @@ static int extract_archive(struct vt_options* opt, vaht_archive* archive, char* 
 	{
 		const char* type = vaht_archive_get_resource_type(archive, t);
 		
-		// check if we pass the type filter
+		/* check if we pass the type filter */
 		if (opt->filter_type != NULL && strcmp(opt->filter_type, type) != 0)
 		{
-			// we have failed the type filter!
+			/* we have failed the type filter! */
 			continue;
 		}
 
-		// if we're converting, but there's no extension for this type,
-		// skip it
+		/* if we're converting, but there's no extension for this type,
+		 * skip it
+		 */
 		if (opt->convert && get_ext(opt, type) == NULL)
 			continue;
 		
@@ -223,10 +227,10 @@ static int extract_archive(struct vt_options* opt, vaht_archive* archive, char* 
 		unsigned int r;
 		for (r = 0; resources[r] != NULL; r++)
 		{
-			// check if we pass the id filter
+			/* check if we pass the id filter */
 			if (opt->filter_id != -1 && opt->filter_id != vaht_resource_id(resources[r]))
 			{
-				// we failed the resource id filter!
+				/* we failed the resource id filter! */
 				continue;
 			}
 			
@@ -272,11 +276,11 @@ int vt_mode_extract(struct vt_options* opt)
 			out = ".";
 		}
 		
-		// create "out"
+		/* create "out" */
 		if (create_directory(opt, out))
 			return 1;
 		
-		// special handling if output provided, only one archive
+		/* special handling if output provided, only one archive */
 		if (opt->output != NULL && opt->input_files_count == 1)
 		{
 			if (create_directory(opt, out))

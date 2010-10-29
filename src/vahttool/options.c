@@ -114,13 +114,13 @@ int vt_options_parse(struct vt_options* opt, int argc, char** argv)
 			opt->filter_id = atoi(optarg);
 			break;
 		case '?':
-			// an error was already printed
+			/* an error was already printed */
 			return 1;
 		default:
-			// we have to check the option indexes now...
+			/* we have to check the option indexes now... */
 			switch (option_index)
 			{
-			case 0: // version
+			case 0: /* version */
 				print_version();
 				return -1;
 			default:
@@ -132,11 +132,11 @@ int vt_options_parse(struct vt_options* opt, int argc, char** argv)
 	
 	if (optind < argc)
 	{
-		// we have input files!
+		/* we have input files! */
 		opt->input_files_count = argc - optind;
 		opt->input_files = &argv[optind];
 	} else {
-		// there were no input files
+		/* there were no input files */
 		fprintf(stderr, "vahttool: error: no input files given.\n");
 		fprintf(stderr, "Use `vahttool --help' for more information.\n");
 		return 1;

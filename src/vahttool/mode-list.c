@@ -11,10 +11,10 @@ static void list_files(struct vt_options* opt, vaht_archive* archive)
 	{
 		const char* type = vaht_archive_get_resource_type(archive, t);
 		
-		// check if we pass the type filter
+		/* check if we pass the type filter */
 		if (opt->filter_type != NULL && strcmp(opt->filter_type, type) != 0)
 		{
-			// we have failed the type filter!
+			/* we have failed the type filter! */
 			continue;
 		}
 		
@@ -23,10 +23,10 @@ static void list_files(struct vt_options* opt, vaht_archive* archive)
 		unsigned int r;
 		for (r = 0; resources[r] != NULL; r++)
 		{
-			// check if we pass the id filter
+			/* check if we pass the id filter */
 			if (opt->filter_id != -1 && opt->filter_id != vaht_resource_id(resources[r]))
 			{
-				// we failed the resource id filter!
+				/* we failed the resource id filter! */
 				continue;
 			}
 			
@@ -51,12 +51,12 @@ int vt_mode_list(struct vt_options* opt)
 		
 		if (archive == NULL)
 		{
-			// we've had a problem opening the file...
+			/* we've had a problem opening the file... */
 			vt_error(opt, "file \"%s\" is not a valid MHK archive", opt->input_files[i]);
 			return 1;
 		}
 		
-		// we may need to specify which file we're outputting
+		/* we may need to specify which file we're outputting */
 		if (opt->input_files_count > 1)
 		{
 			vt_print(opt, "%s :", opt->input_files[i]);

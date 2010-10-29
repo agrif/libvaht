@@ -6,12 +6,12 @@ int main(int argc, char** argv)
 	int error = vt_options_parse(&opt, argc, argv);
 	if (error != 0)
 	{
-		// we're done here
+		/* we're done here */
 		vt_options_free(&opt);
 
 		if (error < 0)
 		{
-			// a negative means "exit, but not error"
+			/* a negative means "exit, but not error" */
 			return 0;
 		}
 		return error;
