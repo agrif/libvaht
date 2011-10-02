@@ -73,9 +73,6 @@ int32_t vaht_plst_bitmap_id(vaht_plst* plst, uint16_t i)
 vaht_bmp* vaht_plst_bitmap_open(vaht_plst* plst, uint16_t i)
 {
 	uint16_t bid = vaht_plst_bitmap_id(plst, i);
-	if (bid < 0)
-		return NULL;
-	
 	vaht_resource* bmp_res = vaht_resource_open(plst->res->archive, "tBMP", bid);
 	if (!bmp_res)
 		return NULL;
