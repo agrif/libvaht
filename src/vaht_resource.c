@@ -168,14 +168,14 @@ uint16_t vaht_resource_grab(vaht_resource* resource)
 
 vaht_resource** vaht_resources_open(vaht_archive* archive, const char* type)
 {
-	uint16_t i, ti, ro = 0, no = 0;
+	uint16_t i /*, ti*/, ro = 0 /*, no = 0 */;
 	for (i = 0; i < archive->type_table_header.num_types; ++i)
 	{
 		if (strcmp(type, archive->resource_types[i]) == 0)
 		{
-			ti = i;
+			/* ti = i; */
 			ro = archive->type_table[i].resource_table_offset;
-			no = archive->type_table[i].name_table_offset;
+			/* no = archive->type_table[i].name_table_offset; */
 			break;
 		}
 	}
