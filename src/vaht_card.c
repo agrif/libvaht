@@ -17,6 +17,13 @@ vaht_card* vaht_card_open(vaht_resource* resource)
 	vaht_resource_read(resource, sizeof(uint16_t), &(ret->zip_mode_place));
 	VAHT_SWAP_U16(ret->zip_mode_place);
 	
+	ret->script = vaht_script_read(resource);
+	if (ret->script == NULL)
+	{
+		free(ret);
+		return NULL;
+	}
+	
 	ret->res = resource;
 	vaht_resource_grab(ret->res);
 	
@@ -27,6 +34,7 @@ void vaht_card_close(vaht_card* card)
 {
 	if (card->cached_name)
 		free(card->cached_name);
+	vaht_script_free(card->script);
 	vaht_resource_close(card->res);
 	free(card);
 }
@@ -63,6 +71,11 @@ const char* vaht_card_name(vaht_card* card)
 uint16_t vaht_card_zip_mode(vaht_card* card)
 {
 	return card->zip_mode_place;
+}
+
+vaht_script* vaht_card_script(vaht_card* card)
+{
+	return card->script;
 }
 
 vaht_plst* vaht_card_plst_open(vaht_card* card)

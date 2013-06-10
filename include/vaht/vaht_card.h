@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include "vaht_resource.h"
+#include "vaht_script.h"
 #include "vaht_plst.h"
 
 /**
@@ -89,6 +90,18 @@ const char* vaht_card_name(vaht_card* card);
  * \return 0 if the card is normal, 1 (usually) if it's zip-enabled
  */
 uint16_t vaht_card_zip_mode(vaht_card* card);
+
+/**
+ * \brief get the script for this card
+ *
+ * This will return the script object for this card. This object is
+ * owned by the card object, so you do not need to free it (it's freed
+ * when the card object is closed).
+ *
+ * \param card the CARD to get the script for
+ * \return the script object
+ */
+vaht_script* vaht_card_script(vaht_card* card);
 
 /**
  * \brief get the associated Picture List for this card

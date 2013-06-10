@@ -152,7 +152,7 @@ struct vaht_card_s
     /* if non-0, this is a zip mode destination */
 	uint16_t zip_mode_place;
 	
-	/* FIXME card scripts */
+	vaht_script* script;
 };
 
 struct vaht_plst_record
@@ -170,6 +170,33 @@ struct vaht_plst_s
 	vaht_resource* res;
 	uint16_t count;
 	struct vaht_plst_record* records;
+};
+
+struct vaht_command_s
+{
+	uint8_t is_branch;
+	union
+	{
+		struct
+		{
+			uint16_t cmd;
+			uint16_t arg_count;
+			uint16_t* args;
+		} cmd;
+		
+		struct
+		{
+			uint16_t var;
+			uint16_t value_count;
+			uint16_t* values;
+			vaht_command*** commands;
+		} branch;
+	};
+};
+
+struct vaht_script_s
+{
+	vaht_command** handlers[EVENT_COUNT];
 };
 
 #endif /* __INCLUDE_VAHT_INTERN_H__ */
