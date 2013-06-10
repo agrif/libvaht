@@ -24,7 +24,7 @@ static const char* event_name(enum vaht_script_event_t event)
 	case EVENT_OPEN_CARD:
 		return "open-card";
 	case EVENT_DISPLAY_UPDATE:
-		return "display_update";
+		return "display-update";
 	default:
 		return NULL;
 	}
