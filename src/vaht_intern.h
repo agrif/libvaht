@@ -199,5 +199,43 @@ struct vaht_script_s
 	vaht_command** handlers[EVENT_COUNT];
 };
 
+struct vaht_blst_record
+{
+	uint16_t index;
+	uint16_t enabled;
+	uint16_t hotspot_id;
+};
+
+struct vaht_blst_s
+{
+	vaht_resource* res;
+	uint16_t count;
+	struct vaht_blst_record* records;
+};
+
+struct vaht_hspt_record
+{
+	uint16_t blst_id;
+	int16_t name_rec;
+	int16_t left;
+	int16_t top;
+	int16_t right;
+	int16_t bottom;
+	uint16_t u0;
+	uint16_t mouse_cursor;
+	uint16_t index;
+	int16_t u1;
+	uint16_t zip_mode;
+};
+
+struct vaht_hspt_s
+{
+	vaht_resource* res;
+	uint16_t count;
+	struct vaht_hspt_record* records;
+	vaht_script** scripts;
+	char** names;
+};
+
 #endif /* __INCLUDE_VAHT_INTERN_H__ */
 

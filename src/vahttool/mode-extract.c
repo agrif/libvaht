@@ -158,6 +158,10 @@ static char* get_ext(struct vt_options* opt, const char* type)
 		return "txt";
 	if (strcmp("PLST", type) == 0)
 		return "txt";
+	if (strcmp("BLST", type) == 0)
+		return "txt";
+	if (strcmp("HSPT", type) == 0)
+		return "txt";
 	return NULL;
 }
 
@@ -181,6 +185,10 @@ static int write_resource(struct vt_options* opt, vaht_resource* res, char* path
 			return vt_convert_CARD_write(opt, res, path);
 		if (strcmp("PLST", type) == 0)
 			return vt_convert_PLST_write(opt, res, path);
+		if (strcmp("BLST", type) == 0)
+			return vt_convert_BLST_write(opt, res, path);
+		if (strcmp("HSPT", type) == 0)
+			return vt_convert_HSPT_write(opt, res, path);
 		return 0;
 	}
 	

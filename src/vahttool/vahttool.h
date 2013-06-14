@@ -57,16 +57,25 @@ int vt_convert_tBMP_write(struct vt_options* opt, vaht_resource* res, char* path
 /* convert-tMOV.c */
 int vt_convert_tMOV_write(struct vt_options* opt, vaht_resource* res, char* path);
 
-/* convect-tWAV.c */
+/* convert-tWAV.c */
 int vt_convert_tWAV_write(struct vt_options* opt, vaht_resource* res, char* path);
 
-/* convect-NAME.c */
+/* convert-NAME.c */
 int vt_convert_NAME_write(struct vt_options* opt, vaht_resource* res, char* path);
 
-/* convect-CARD.c */
+/* convert-CARD.c */
 int vt_convert_CARD_write(struct vt_options* opt, vaht_resource* res, char* path);
 
-/* convect-PLST.c */
+/* convert-PLST.c */
 int vt_convert_PLST_write(struct vt_options* opt, vaht_resource* res, char* path);
+
+/* convert-script.c */
+void vt_convert_script_write(struct vt_options* opt, vaht_script* script, FILE* fp);
+
+/* convert-BLST.c */
+int vt_convert_BLST_write(struct vt_options* opt, vaht_resource* res, char* path);
+
+/* convert-BLST.c */
+int vt_convert_HSPT_write(struct vt_options* opt, vaht_resource* res, char* path);
 
 #endif /* __INCLUDE_VAHTTOOL_H__ */

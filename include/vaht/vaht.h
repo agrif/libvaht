@@ -17,5 +17,7 @@
 #include "vaht_card.h"
 #include "vaht_plst.h"
 #include "vaht_script.h"
+#include "vaht_blst.h"
+#include "vaht_hspt.h"
 
 #endif /* __INCLUDE_VAHT_H__ */

@@ -5,6 +5,8 @@
 #include "vaht_resource.h"
 #include "vaht_script.h"
 #include "vaht_plst.h"
+#include "vaht_blst.h"
+#include "vaht_hspt.h"
 
 /**
  * \defgroup vaht_card_group Cards
@@ -115,6 +117,32 @@ vaht_script* vaht_card_script(vaht_card* card);
  * \return the PLST resource, or NULL
  */
 vaht_plst* vaht_card_plst_open(vaht_card* card);
+
+/**
+ * \brief get the associated Button List for this card
+ *
+ * This will get the BLST resource associated with this card -- it's
+ * the one with the same id as the card. If for some reason it does
+ * not exist, this function returns NULL. You are responsible for
+ * closing this when you're done with it!
+ *
+ * \param card the CARD to get the list for
+ * \return the BLST resource, or NULL
+ */
+vaht_blst* vaht_card_blst_open(vaht_card* card);
+
+/**
+ * \brief get the associated Hotspot resource for this card
+ *
+ * This will get the HSPT resource associated with this card -- it's
+ * the one with the same id as the card. If for some reason it does
+ * not exist, this function returns NULL. You are responsible for
+ * closing this when you're done with it!
+ *
+ * \param card the CARD to get the list for
+ * \return the HSPT resource, or NULL
+ */
+vaht_hspt* vaht_card_hspt_open(vaht_card* card);
 
 /**
  * @}

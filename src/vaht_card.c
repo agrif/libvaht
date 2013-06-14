@@ -90,3 +90,29 @@ vaht_plst* vaht_card_plst_open(vaht_card* card)
 	
 	return plst;
 }
+
+vaht_blst* vaht_card_blst_open(vaht_card* card)
+{
+	/* open the BLST */
+	vaht_resource* blst_res = vaht_resource_open(card->res->archive, "BLST", card->res->id);
+	if (!blst_res)
+		return NULL;
+	
+	vaht_blst* blst = vaht_blst_open(blst_res);
+	vaht_resource_close(blst_res);
+	
+	return blst;
+}
+
+vaht_hspt* vaht_card_hspt_open(vaht_card* card)
+{
+	/* open the HSPT */
+	vaht_resource* hspt_res = vaht_resource_open(card->res->archive, "HSPT", card->res->id);
+	if (!hspt_res)
+		return NULL;
+	
+	vaht_hspt* hspt = vaht_hspt_open(hspt_res);
+	vaht_resource_close(hspt_res);
+	
+	return hspt;
+}
