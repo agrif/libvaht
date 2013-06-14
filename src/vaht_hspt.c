@@ -85,14 +85,6 @@ static inline int32_t rmap_index(vaht_hspt* hspt, uint16_t index)
 	return -1;
 }
 
-/* int32_t vaht_plst_bitmap_id(vaht_plst* plst, uint16_t i) */
-/* { */
-/* 	int32_t index = rmap_index(plst, i); */
-/* 	if (index < 0) */
-/* 		return -1; */
-/* 	return plst->records[index].bitmap_id; */
-/* } */
-
 uint16_t vaht_hspt_blst_id(vaht_hspt* hspt, uint16_t i)
 {
 	int32_t index = rmap_index(hspt, i);
