@@ -237,5 +237,11 @@ struct vaht_hspt_s
 	char** names;
 };
 
+struct vaht_rmap_s
+{
+	vaht_resource* res;
+	uint16_t count;
+};
+
 #endif /* __INCLUDE_VAHT_INTERN_H__ */
 

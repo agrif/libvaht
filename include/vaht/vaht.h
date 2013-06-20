@@ -19,5 +19,6 @@
 #include "vaht_script.h"
 #include "vaht_blst.h"
 #include "vaht_hspt.h"
+#include "vaht_rmap.h"
 
 #endif /* __INCLUDE_VAHT_H__ */

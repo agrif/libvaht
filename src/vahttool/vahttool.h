@@ -75,7 +75,10 @@ void vt_convert_script_write(struct vt_options* opt, vaht_script* script, FILE* 
 /* convert-BLST.c */
 int vt_convert_BLST_write(struct vt_options* opt, vaht_resource* res, char* path);
 
-/* convert-BLST.c */
+/* convert-HSPT.c */
 int vt_convert_HSPT_write(struct vt_options* opt, vaht_resource* res, char* path);
+
+/* convert-RMAP.c */
+int vt_convert_RMAP_write(struct vt_options* opt, vaht_resource* res, char* path);
 
 #endif /* __INCLUDE_VAHTTOOL_H__ */
