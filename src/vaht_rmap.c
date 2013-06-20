@@ -6,8 +6,13 @@ vaht_rmap* vaht_rmap_open(vaht_resource* resource)
 {
 	if (strcmp(vaht_resource_type(resource), "RMAP") != 0)
 		return NULL;
+	
+	/* I know, this seems like a good idea. But check out jspit RMAP 1:
+	   it has 1 byte leftover! whyyyyyyyyyyyyyy?!?!?!?!?!?
+	
 	if (vaht_resource_size(resource) % sizeof(uint32_t) != 0)
 		return NULL;
+	*/
 	
 	vaht_rmap* ret = malloc(sizeof(vaht_rmap));
 	ret->count = vaht_resource_size(resource) / sizeof(uint32_t);	
