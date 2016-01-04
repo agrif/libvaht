@@ -20,7 +20,7 @@ struct vaht_rmap_s;
  *
  * This data type refers to an individual reverse map. Use it as a
  * pointer only, because it is always dynamically allocated.
- * \sa vaht_name_open
+ * \sa vaht_rmap_open
  */
 typedef struct vaht_rmap_s vaht_rmap;
 

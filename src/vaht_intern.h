@@ -243,5 +243,27 @@ struct vaht_rmap_s
 	uint16_t count;
 };
 
+struct vaht_slst_record
+{
+    uint16_t index;
+    uint16_t sound_count;
+    uint16_t* sound_ids;
+    uint16_t fade_flags;
+    uint16_t loop;
+    uint16_t global_volume;
+    uint16_t u0;
+    uint16_t u1;
+    uint16_t* volumes;
+    int16_t* balances;
+    uint16_t* u2;
+};
+
+struct vaht_slst_s
+{
+    vaht_resource* res;
+    uint16_t count;
+    struct vaht_slst_record* records;
+};
+
 #endif /* __INCLUDE_VAHT_INTERN_H__ */
 

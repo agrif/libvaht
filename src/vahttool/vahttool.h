@@ -81,4 +81,7 @@ int vt_convert_HSPT_write(struct vt_options* opt, vaht_resource* res, char* path
 /* convert-RMAP.c */
 int vt_convert_RMAP_write(struct vt_options* opt, vaht_resource* res, char* path);
 
+/* convert-SLST.c */
+int vt_convert_SLST_write(struct vt_options* opt, vaht_resource* res, char* path);
+
 #endif /* __INCLUDE_VAHTTOOL_H__ */

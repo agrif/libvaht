@@ -20,5 +20,6 @@
 #include "vaht_blst.h"
 #include "vaht_hspt.h"
 #include "vaht_rmap.h"
+#include "vaht_slst.h"
 
 #endif /* __INCLUDE_VAHT_H__ */
