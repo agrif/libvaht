@@ -113,7 +113,7 @@ uint16_t vaht_slst_count(vaht_slst* slst, uint16_t i)
     return slst->records[index].sound_count;
 }
 
-uint16_t vaht_slst_id(vaht_slst* slst, uint16_t i, uint16_t j)
+uint16_t vaht_slst_sound_id(vaht_slst* slst, uint16_t i, uint16_t j)
 {
     int32_t index = rmap_index(slst, i);
     if (index < 0)

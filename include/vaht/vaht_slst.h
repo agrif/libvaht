@@ -87,7 +87,7 @@ uint16_t vaht_slst_count(vaht_slst* slst, uint16_t i);
  * \return the resource ID of the tWAV resource
  * \sa vaht_slst_records vaht_slst_count
  */
-uint16_t vaht_slst_id(vaht_slst* slst, uint16_t i, uint16_t j);
+uint16_t vaht_slst_sound_id(vaht_slst* slst, uint16_t i, uint16_t j);
 
 /**
  * \brief fade settings

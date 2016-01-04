@@ -22,7 +22,7 @@ int vt_convert_SLST_write(struct vt_options* opt, vaht_resource* res, char* path
 	
 	/* do the conversion */
 	fprintf(fp, "#\tcount\tfade\tloop\tglobal_volume\n");
-	fprintf(fp, "\tid\tvolume\tbalance\n");
+	fprintf(fp, "\tsoundid\tvolume\tbalance\n");
 	uint16_t count = vaht_slst_records(slst);
 	uint16_t i;
 	for (i = 1; i <= count; i++)
@@ -35,10 +35,10 @@ int vt_convert_SLST_write(struct vt_options* opt, vaht_resource* res, char* path
         uint16_t j;
         for (j = 0; j < sound_count; j++)
         {
-            uint16_t id = vaht_slst_id(slst, i, j);
+            uint16_t sound_id = vaht_slst_sound_id(slst, i, j);
             uint16_t volume = vaht_slst_volume(slst, i, j);
             int16_t balance = vaht_slst_balance(slst, i, j);
-            fprintf(fp, "\t%i\t%i\t%i\n", id, volume, balance);
+            fprintf(fp, "\t%i\t%i\t%i\n", sound_id, volume, balance);
         }
 	}
 
