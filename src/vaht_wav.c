@@ -47,9 +47,9 @@ static inline uint32_t adpcm_read(vaht_wav* wav, uint32_t size, void* buffer)
 	
 	/* output buffer, 16 bits per sample, insize * 2 samples */
 	int16_t* output = buffer;
-	uint16_t outcount = insize * 2;
+	uint32_t outcount = insize * 2;
 	
-	unsigned int i;
+	uint32_t i;
 	for (i = 0; i < outcount; i++)
 	{
 		uint8_t nibble = input[i / 2];
