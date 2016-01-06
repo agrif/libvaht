@@ -4,14 +4,14 @@
 #include <string.h>
 
 /* The Riven BMP format is ugly as hell -- forgive the macros */
-#define COLOR(ti, col) (table[(ti * 3) + col])
-#define LOOKBACK(num, spin) (idata[si - (num * 2) + (spin)])
-#define LOOKBACKP(m) (idata[(long)si - (long)m])
-#define B 0
+#define COLOR(ti, col) (bmp->table[(ti * 3) + col])
+#define LOOKBACK(num, spin) (decoded[si - (num * 2) + (spin)])
+#define LOOKBACKP(m) (decoded[(long)si - (long)m])
+#define R 0
 #define G 1
-#define R 2
-#define EMIT(r, g, b) bmp->data[i] = (r); ++i; bmp->data[i] = (g); ++i; bmp->data[i] = (b); ++i;
-#define EMITI(ind) idata[i] = (ind); ++i;
+#define B 2
+#define EMIT(c) bmp->data[3 * i] = COLOR(c, R); bmp->data[3 * i + 1] = COLOR(c, G); bmp->data[3 * i + 2] = COLOR(c, B); bmp->idata[i] = c; ++i;
+#define EMITI(ind) decoded[i] = (ind); ++i;
 #define READC(v) vaht_resource_read(bmp->res, sizeof(uint8_t), &v);
 
 vaht_bmp* vaht_bmp_open(vaht_resource* resource)
@@ -33,6 +33,8 @@ vaht_bmp* vaht_bmp_open(vaht_resource* resource)
 	ret->height = header.height;
 	ret->bytes_per_row = header.bytes_per_row;
 	ret->data = NULL;
+	ret->table = NULL;
+	ret->idata = NULL;
 	ret->datastart = vaht_resource_tell(resource);
 	ret->res = resource;
 	
@@ -60,7 +62,6 @@ uint8_t* vaht_bmp_data(vaht_bmp* bmp)
 	
 	uint8_t t1, t2, t3;
 	unsigned int si, ut1, ut2;
-
 	
 	if (vaht_bmp_truecolor(bmp))
 	{
@@ -83,18 +84,27 @@ uint8_t* vaht_bmp_data(vaht_bmp* bmp)
 	uint32_t u0;
 	vaht_resource_read(bmp->res, sizeof(uint32_t), &u0);
 	VAHT_SWAP_U16(u0); /* should now be 0x030418FF */
-	uint8_t* table = malloc(sizeof(uint8_t) * 256 * 3);
-	vaht_resource_read(bmp->res, sizeof(uint8_t) * 256 * 3, table);
-	/* table is in BGR, BGR, BGR format, like truecolor */
-	
-	unsigned int i = 0;
+	bmp->table = malloc(sizeof(uint8_t) * 256 * 3);
+	vaht_resource_read(bmp->res, sizeof(uint8_t) * 256 * 3, bmp->table);
+	/* table is in BGR, BGR, BGR format, like truecolor
+	   so we need to convert it to RGB like sane people */
+	unsigned int i;
+	for (i = 0; i < 256; i++)
+	{
+		uint32_t r = bmp->table[3 * i];
+		bmp->table[3 * i] = bmp->table[3 * i + 2];
+		bmp->table[3 * i + 2] = r;
+	}
+
+	i = 0;
 	uint8_t c;
+	bmp->idata = malloc(sizeof(uint8_t) * bmp->width * bmp->height);
 	
 	if (!vaht_bmp_compressed(bmp))
 	{
-		while (i < sizeof(uint8_t) * bmp->width * bmp->height * 3)
+		while (i < bmp->width * bmp->height)
 		{
-			if ((i / 3) % bmp->width == 0 && i != 0)
+			if (i % bmp->width == 0 && i != 0)
 			{
 				ut1 = bmp->bytes_per_row - bmp->width;
 				while (ut1 > 0)
@@ -104,9 +114,8 @@ uint8_t* vaht_bmp_data(vaht_bmp* bmp)
 				}
 			}		
 			READC(c);
-			EMIT(COLOR(c, R), COLOR(c, G), COLOR(c, B));
+			EMIT(c);
 		}
-		free(table);
 		return bmp->data;
 	}
 	
@@ -118,7 +127,7 @@ uint8_t* vaht_bmp_data(vaht_bmp* bmp)
 	
 	unsigned int scc = 0; /* sub-command count, 0 when normal commands */
 	int st1;
-	uint8_t* idata = malloc((bmp->height * bmp->bytes_per_row * sizeof(uint8_t)));
+	uint8_t* decoded = malloc((bmp->height * bmp->bytes_per_row * sizeof(uint8_t)));
 	while (i < bmp->height * bmp->bytes_per_row)
 	{
 		READC(c);
@@ -379,18 +388,29 @@ uint8_t* vaht_bmp_data(vaht_bmp* bmp)
 	
 	i = 0;
 
-	while (i < bmp->width * bmp->height * 3)
+	while (i < bmp->width * bmp->height)
 	{
-		si = (i / 3) / bmp->width; /* y */
-		ut1 = (i / 3) % bmp->width; /* x */
-		c = idata[(si * bmp->bytes_per_row) + ut1];
-		EMIT(COLOR(c, R), COLOR(c, G), COLOR(c, B));
+		si = i / bmp->width; /* y */
+		ut1 = i % bmp->width; /* x */
+		c = decoded[(si * bmp->bytes_per_row) + ut1];
+		EMIT(c);
 	}
 
-	free(table);
-	free(idata);
-	
+	free(decoded);
+
 	return bmp->data;
+}
+
+uint8_t* vaht_bmp_palette(vaht_bmp* bmp)
+{
+	vaht_bmp_data(bmp);
+	return bmp->table;
+}
+
+uint8_t* vaht_bmp_indexed_data(vaht_bmp* bmp)
+{
+	vaht_bmp_data(bmp);
+	return bmp->idata;
 }
 
 void vaht_bmp_close(vaht_bmp* bmp)
@@ -398,6 +418,10 @@ void vaht_bmp_close(vaht_bmp* bmp)
 	vaht_resource_close(bmp->res);
 	if (bmp->data)
 		free(bmp->data);
+	if (bmp->table)
+		free(bmp->table);
+	if (bmp->idata)
+		free(bmp->idata);
 	free(bmp);
 }
 

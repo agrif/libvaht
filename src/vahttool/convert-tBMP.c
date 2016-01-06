@@ -35,17 +35,34 @@ int vt_convert_tBMP_write(struct vt_options* opt, vaht_resource* res, char* path
 	*/
 	
 	png_init_io(png_ptr, fp);
-	png_set_IHDR(png_ptr, info_ptr, vaht_bmp_width(bmp), vaht_bmp_height(bmp),
-				 8, PNG_COLOR_TYPE_RGB, PNG_INTERLACE_NONE,
-				 PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
-	png_write_info(png_ptr, info_ptr);
-	
-	uint8_t* data = vaht_bmp_data(bmp);
-	unsigned int i;
-	for (i = 0; i < vaht_bmp_width(bmp) * vaht_bmp_height(bmp) * 3;
-		 i += vaht_bmp_width(bmp) * 3)
+	if (vaht_bmp_truecolor(bmp))
 	{
-		png_write_row(png_ptr, &(data[i]));
+		png_set_IHDR(png_ptr, info_ptr, vaht_bmp_width(bmp), vaht_bmp_height(bmp),
+					 8, PNG_COLOR_TYPE_RGB, PNG_INTERLACE_NONE,
+					 PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
+		png_write_info(png_ptr, info_ptr);
+		
+		uint8_t* data = vaht_bmp_data(bmp);
+		unsigned int i;
+		for (i = 0; i < vaht_bmp_width(bmp) * vaht_bmp_height(bmp) * 3;
+			 i += vaht_bmp_width(bmp) * 3)
+		{
+			png_write_row(png_ptr, &(data[i]));
+		}
+	} else {
+		png_set_IHDR(png_ptr, info_ptr, vaht_bmp_width(bmp), vaht_bmp_height(bmp),
+					 8, PNG_COLOR_TYPE_PALETTE, PNG_INTERLACE_NONE,
+					 PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
+		png_set_PLTE(png_ptr, info_ptr, (png_colorp)vaht_bmp_palette(bmp), 256);
+		png_write_info(png_ptr, info_ptr);
+		
+		uint8_t* data = vaht_bmp_indexed_data(bmp);
+		unsigned int i;
+		for (i = 0; i < vaht_bmp_width(bmp) * vaht_bmp_height(bmp);
+			 i += vaht_bmp_width(bmp))
+		{
+			png_write_row(png_ptr, &(data[i]));
+		}
 	}
 	
 	png_write_end(png_ptr, info_ptr);

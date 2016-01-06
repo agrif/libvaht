@@ -103,6 +103,8 @@ struct vaht_bmp_s
 	uint16_t height;
 	uint16_t bytes_per_row;
 	uint8_t* data;
+	uint8_t* table;
+	uint8_t* idata;
 	uint8_t format; /* bit 0 - compressed, 1 - truecolor */
 	uint32_t datastart;
 	vaht_resource* res;

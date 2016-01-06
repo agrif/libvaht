@@ -91,6 +91,52 @@ uint16_t vaht_bmp_height(vaht_bmp* bmp);
 uint8_t* vaht_bmp_data(vaht_bmp* bmp);
 
 /**
+ * \brief get the palette for a bitmap
+ *
+ * This function will read in the palette for a bitmap, and decompress it if
+ * needed. Note that if there is decompression to be done, it is done now,
+ * and not when the bmp object is created.
+ *
+ * The palette is a list of 256 pixels, each pixel containing a byte
+ * each of red, green, and blue components. Each component varies from
+ * 0 to 255, with 0 meaning black.
+ *
+ * The pointer returned does not have to be freed, as the data is cached
+ * until the bitmap object is closed. Subsequent calls to this function will
+ * not reread or decompress the data, but simply returned the cached data.
+ *
+ * If the image is truecolor (not indexed), this function returns NULL.
+ *
+ * \param bmp the bitmap to get the palette for
+ * \return a pointer to the palette data (or NULL)
+ * \sa vaht_bmp_width vaht_bmp_height vaht_bmp_indexed_data vaht_bmp_truecolor
+ */
+uint8_t* vaht_bmp_palette(vaht_bmp* bmp);
+
+/**
+ * \brief get the decompressed indexed data for a bitmap
+ *
+ * This function will read in the data for a bitmap, and decompress it if
+ * needed. Note that if there is decompression to be done, it is done now,
+ * and not when the bmp object is created.
+ *
+ * The data is a list of pixels, each pixel containing a byte index
+ * into the palette table. The pixels come ordered from left to right,
+ * then top down. (The first row comes first, then the second, etc.)
+ *
+ * The pointer returned does not have to be freed, as the data is cached
+ * until the bitmap object is closed. Subsequent calls to this function will
+ * not reread or decompress the data, but simply returned the cached data.
+ *
+ * If the image is truecolor (not indexed), this function returns NULL.
+ *
+ * \param bmp the bitmap to get the indexed data for
+ * \return a pointer to the indexed bitmap data (or NULL)
+ * \sa vaht_bmp_width vaht_bmp_height vaht_bmp_palette vaht_bmp_truecolor
+ */
+uint8_t* vaht_bmp_indexed_data(vaht_bmp* bmp);
+
+/**
  * \brief was the image compressed?
  *
  * This function will return 1 if the image was compressed in the archive,
