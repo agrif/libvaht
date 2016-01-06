@@ -4,10 +4,10 @@
 
 vaht_slst* vaht_slst_open(vaht_resource* resource)
 {
-	if (strcmp(vaht_resource_type(resource), "SLST") != 0)
-		return NULL;
-	
-	vaht_slst* ret = malloc(sizeof(vaht_slst));
+    if (strcmp(vaht_resource_type(resource), "SLST") != 0)
+        return NULL;
+    
+    vaht_slst* ret = malloc(sizeof(vaht_slst));
     
     vaht_resource_seek(resource, 0);
     
@@ -64,16 +64,16 @@ vaht_slst* vaht_slst_open(vaht_resource* resource)
         }
     }
 
-	ret->res = resource;
-	vaht_resource_grab(ret->res);
-	
-	return ret;
+    ret->res = resource;
+    vaht_resource_grab(ret->res);
+    
+    return ret;
 }
 
 void vaht_slst_close(vaht_slst* slst)
 {
     uint16_t i;
-	vaht_resource_close(slst->res);
+    vaht_resource_close(slst->res);
     for (i = 0; i < slst->count; i++)
     {
         free(slst->records[i].sound_ids);
@@ -82,7 +82,7 @@ void vaht_slst_close(vaht_slst* slst)
         free(slst->records[i].u2);
     }
     free(slst->records);
-	free(slst);
+    free(slst);
 }
 
 uint16_t vaht_slst_records(vaht_slst* slst)
@@ -93,16 +93,16 @@ uint16_t vaht_slst_records(vaht_slst* slst)
 /* helper to reverse-map an index into our loaded records */
 static inline int32_t rmap_index(vaht_slst* slst, uint16_t index)
 {
-	uint16_t i;
-	for (i = 0; i < slst->count; i++)
-	{
-		if (slst->records[i].index == index)
-		{
-			return i;
-		}
-	}
-	
-	return -1;
+    uint16_t i;
+    for (i = 0; i < slst->count; i++)
+    {
+        if (slst->records[i].index == index)
+        {
+            return i;
+        }
+    }
+    
+    return -1;
 }
 
 uint16_t vaht_slst_count(vaht_slst* slst, uint16_t i)

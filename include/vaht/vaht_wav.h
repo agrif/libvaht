@@ -32,14 +32,14 @@ typedef struct vaht_wav_s vaht_wav;
  */
 enum vaht_wav_encoding_t
 {
-	/** unknown encoding type (unsupported) */
-	tWAV_UNKNOWN,
-	/** raw PCM sound (not yet supported) */
-	tWAV_PCM,
-	/** Intel DVI ADPCM encoding */
-	tWAV_ADPCM,
-	/** MPEG-2 Layer II encoding (not yet supported) */
-	tWAV_MP2
+    /** unknown encoding type (unsupported) */
+    tWAV_UNKNOWN,
+    /** raw PCM sound (not yet supported) */
+    tWAV_PCM,
+    /** Intel DVI ADPCM encoding */
+    tWAV_ADPCM,
+    /** MPEG-2 Layer II encoding (not yet supported) */
+    tWAV_MP2
 };
 
 /**

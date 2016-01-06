@@ -31,18 +31,18 @@ typedef struct vaht_script_s vaht_script;
  */
 enum vaht_script_event_t
 {
-	EVENT_MOUSE_DOWN = 0,
-	EVENT_MOUSE_STILL_DOWN = 1,
-	EVENT_MOUSE_UP = 2,
-	EVENT_MOUSE_ENTER = 3,
-	EVENT_MOUSE_WITHIN = 4,
-	EVENT_MOUSE_LEAVE = 5,
-	EVENT_LOAD_CARD = 6,
-	EVENT_CLOSE_CARD = 7,
-	EVENT_OPEN_CARD = 9,
-	EVENT_DISPLAY_UPDATE = 10,
-	
-	EVENT_COUNT
+    EVENT_MOUSE_DOWN = 0,
+    EVENT_MOUSE_STILL_DOWN = 1,
+    EVENT_MOUSE_UP = 2,
+    EVENT_MOUSE_ENTER = 3,
+    EVENT_MOUSE_WITHIN = 4,
+    EVENT_MOUSE_LEAVE = 5,
+    EVENT_LOAD_CARD = 6,
+    EVENT_CLOSE_CARD = 7,
+    EVENT_OPEN_CARD = 9,
+    EVENT_DISPLAY_UPDATE = 10,
+    
+    EVENT_COUNT
 };
 
 struct vaht_command_s;

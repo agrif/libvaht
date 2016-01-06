@@ -20,26 +20,26 @@
 
 struct vt_options
 {
-	enum
-	{
-		VERBOSE, NORMAL, QUIET
-	} verbosity;
-	
-	enum
-	{
-		NONE, LIST, EXTRACT
-	} mode;
-	
-	/* filter_id == -1 means don't use! */
-	int filter_id;
-	char* filter_type;
-	
-	char** input_files;
-	unsigned int input_files_count;
-	
-	char* output;
-	
-	int convert; /* 0 means no, 1 means yes (duh) */
+    enum
+    {
+        VERBOSE, NORMAL, QUIET
+    } verbosity;
+    
+    enum
+    {
+        NONE, LIST, EXTRACT
+    } mode;
+    
+    /* filter_id == -1 means don't use! */
+    int filter_id;
+    char* filter_type;
+    
+    char** input_files;
+    unsigned int input_files_count;
+    
+    char* output;
+    
+    int convert; /* 0 means no, 1 means yes (duh) */
 };
 
 int vt_options_parse(struct vt_options* opt, int argc, char** argv);
